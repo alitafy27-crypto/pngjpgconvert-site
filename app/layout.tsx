@@ -99,11 +99,11 @@ export const metadata: Metadata = {
     images: ["/og-image.png"],
   },
 
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
-  },
+icons: {
+  icon: "/favicon-new.ico",
+  shortcut: "/favicon-new.ico",
+  apple: "/apple-touch-icon.png",
+},
 };
 
 export const viewport: Viewport = {
