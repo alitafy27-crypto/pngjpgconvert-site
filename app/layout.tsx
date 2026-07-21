@@ -1,5 +1,6 @@
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -44,7 +45,6 @@ export const metadata: Metadata = {
   ],
 
   creator: "PNG JPG Convert",
-
   publisher: "PNG JPG Convert",
 
   alternates: {
@@ -66,7 +66,6 @@ export const metadata: Metadata = {
 
   openGraph: {
     type: "website",
-
     url: "https://pngjpgconvert.com",
 
     title: "PNG JPG Convert - Free Online Image Converter",
@@ -158,6 +157,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+
         <Header />
 
         <main>{children}</main>
@@ -177,6 +177,9 @@ export default function RootLayout({
             __html: JSON.stringify(websiteSchema),
           }}
         />
+
+        <GoogleAnalytics gaId="G-ZJ95NDYYHE" />
+
       </body>
     </html>
   );
