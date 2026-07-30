@@ -32,7 +32,7 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
-      // إصلاح الروابط القديمة
+      // 1. إصلاح الروابط القديمة
       {
         source: "/privacy-policy",
         destination: "/privacy",
@@ -51,6 +51,71 @@ const nextConfig: NextConfig = {
       {
         source: "/terms-of-service/",
         destination: "/terms",
+        permanent: true,
+      },
+
+      // 2. إزالة www → non-www
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "www.pngjpgconvert.com",
+          },
+        ],
+        destination: "https://pngjpgconvert.com/:path*",
+        permanent: true,
+      },
+
+      // 3. تصحيح النطاق الخاطئ (pnpjgpjqconvert.com)
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "pnpjgpjqconvert.com",
+          },
+        ],
+        destination: "https://pngjpgconvert.com/:path*",
+        permanent: true,
+      },
+
+      // 4. تصحيح www للنطاق الخاطئ
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "www.pnpjgpjqconvert.com",
+          },
+        ],
+        destination: "https://pngjpgconvert.com/:path*",
+        permanent: true,
+      },
+
+      // 5. تصحيح النطاق الخاطئ (pngjpjgcnovert.com)
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "pngjpjgcnovert.com",
+          },
+        ],
+        destination: "https://pngjpgconvert.com/:path*",
+        permanent: true,
+      },
+
+      // 6. تصحيح www للنطاق الخاطئ
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "www.pngjpjgcnovert.com",
+          },
+        ],
+        destination: "https://pngjpgconvert.com/:path*",
         permanent: true,
       },
     ];
