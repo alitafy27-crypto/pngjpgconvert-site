@@ -3,6 +3,8 @@ type Props = {
   slug: string;
 };
 
+const BASE_URL = "https://pngjpgconvert.com";
+
 export default function BreadcrumbSchema({
   title,
   slug,
@@ -10,20 +12,24 @@ export default function BreadcrumbSchema({
   const schema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-
     itemListElement: [
       {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://mysite.com",
+        item: BASE_URL,
       },
-
       {
         "@type": "ListItem",
         position: 2,
+        name: "Tools",
+        item: `${BASE_URL}/tools`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
         name: title,
-        item: `https://mysite.com/${slug}`,
+        item: `${BASE_URL}/${slug}`,
       },
     ],
   };

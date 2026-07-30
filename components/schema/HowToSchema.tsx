@@ -7,21 +7,25 @@ type Props = {
 export default function HowToSchema({
   tool,
 }: Props) {
+  if (!tool.howTo || tool.howTo.length === 0) {
+    return null;
+  }
+
   const schema = {
     "@context": "https://schema.org",
-
     "@type": "HowTo",
-
-    name: tool.title,
-
+    name: `How to ${tool.title}`,
     description: tool.description,
-
-    step: tool.howTo.map((item) => ({
+    totalTime: "PT1M",
+    step: tool.howTo.map((item, index) => ({
       "@type": "HowToStep",
-
+      position: index + 1,
       name: item.title,
-
       text: item.description,
+      image: {
+        "@type": "ImageObject",
+        url: "https://pngjpgconvert.com/og-image.png",
+      },
     })),
   };
 

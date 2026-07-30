@@ -43,53 +43,49 @@ export async function generateMetadata({
 
   return {
     title: tool.seoTitle,
-
     description: tool.seoDescription,
-
     keywords: tool.keywords,
 
     alternates: {
       canonical: url,
+      languages: {
+        "en-US": url,
+      },
     },
 
     openGraph: {
       title: tool.seoTitle,
-
       description: tool.seoDescription,
-
       url,
-
       siteName: "PNG JPG Convert",
-
       locale: "en_US",
-
       type: "website",
-
       images: [
         {
           url: "/og-image.png",
           width: 1200,
           height: 630,
-          alt: `${tool.title} | PNG JPG Convert`,
+          alt: `${tool.title} | PNG JPG Convert - Free Online Image Converter`,
+          type: "image/png",
         },
       ],
     },
 
     twitter: {
       card: "summary_large_image",
-
+      site: "@pngjpgconvert",
+      creator: "@pngjpgconvert",
       title: tool.seoTitle,
-
       description: tool.seoDescription,
-
-      images: ["/og-image.png"],
+      images: {
+        url: "/og-image.png",
+        alt: `${tool.title} | PNG JPG Convert - Free Online Image Converter`,
+      },
     },
 
     robots: {
       index: true,
-
       follow: true,
-
       googleBot: {
         index: true,
         follow: true,
@@ -98,6 +94,17 @@ export async function generateMetadata({
         "max-video-preview": -1,
       },
     },
+
+    applicationName: "PNG JPG Convert",
+    authors: [
+      {
+        name: "PNG JPG Convert",
+        url: "https://pngjpgconvert.com",
+      },
+    ],
+    creator: "PNG JPG Convert",
+    publisher: "PNG JPG Convert",
+    category: "technology",
   };
 }
 
@@ -115,14 +122,11 @@ export default async function ToolPage({
   return (
     <>
       <ToolSchema tool={tool} />
-
       <BreadcrumbSchema
         title={tool.title}
         slug={tool.slug}
       />
-
       <FAQSchema tool={tool} />
-
       <HowToSchema tool={tool} />
 
       <ImageToolPage
