@@ -25,10 +25,6 @@ const nextConfig: NextConfig = {
             key: "X-Frame-Options",
             value: "SAMEORIGIN",
           },
-          {
-            key: "Strict-Transport-Security",
-            value: "max-age=31536000; includeSubDomains; preload",
-          },
         ],
       },
     ];
@@ -36,9 +32,14 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
-      // فقط إصلاح الروابط القديمة
+      // إصلاح الروابط القديمة
       {
         source: "/privacy-policy",
+        destination: "/privacy",
+        permanent: true,
+      },
+      {
+        source: "/privacy-policy/",
         destination: "/privacy",
         permanent: true,
       },
@@ -47,16 +48,9 @@ const nextConfig: NextConfig = {
         destination: "/terms",
         permanent: true,
       },
-      // إزالة www (بسيط)
       {
-        source: "/:path*",
-        has: [
-          {
-            type: "host",
-            value: "www.pngjpgconvert.com",
-          },
-        ],
-        destination: "https://pngjpgconvert.com/:path*",
+        source: "/terms-of-service/",
+        destination: "/terms",
         permanent: true,
       },
     ];
