@@ -1,18 +1,29 @@
 import type { BlogArticle } from "./blog.types";
-import howToConvertPngToJpg from "./how-to-convert-png-to-jpg";
-import pngVsJpg from "./png-vs-jpg";
+
+import { howToCompressImagesArticle } from "./how-to-compress-images";
+import { howToConvertJpgToPngArticle } from "./how-to-convert-jpg-to-png";
+import { pngToJpgArticle } from "./how-to-convert-png-to-jpg";
+import { howToConvertWebpToJpgArticle } from "./how-to-convert-webp-to-jpg";
+import pngVsJpgArticle from './png-vs-jpg';
+import { webpVsJpgArticle } from "./webp-vs-jpg";
 
 export const blogArticles: BlogArticle[] = [
-  howToConvertPngToJpg,
-  pngVsJpg,
+  pngToJpgArticle,
+  howToConvertJpgToPngArticle,
+  howToConvertWebpToJpgArticle,
+  howToCompressImagesArticle,
+  pngVsJpgArticle,
+  webpVsJpgArticle,
 ];
 
-export const getBlogArticle = (
+export function getBlogArticle(
   slug: string
-): BlogArticle | undefined =>
-  blogArticles.find(article => article.slug === slug);
+): BlogArticle | undefined {
+  return blogArticles.find(
+    (article) => article.slug === slug
+  );
+}
 
-export const getAllBlogSlugs = (): { slug: string }[] =>
-  blogArticles.map(article => ({
-    slug: article.slug,
-  }));
+export function getAllBlogSlugs() {
+  return blogArticles.map(({ slug }) => ({ slug }));
+}

@@ -7,7 +7,6 @@ import type { BlogArticle } from "./blog.types";
 
 export const howToConvertWebpToJpgArticle: BlogArticle = {
   slug: "how-to-convert-webp-to-jpg",
-
   title:
     "How to Convert WEBP to JPG: Complete Guide to Converting WEBP Images to JPG in 2026",
 
