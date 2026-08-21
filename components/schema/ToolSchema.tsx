@@ -4,149 +4,382 @@ type Props = {
   tool: ToolData;
 };
 
+const SITE_URL = "https://pngjpgconvert.com";
+const SITE_NAME = "PNG JPG Convert";
+const OG_IMAGE = `${SITE_URL}/og-image.png`;
+
+function cleanText(value: string | undefined): string {
+  return (
+    value
+      ?.replace(/\s+/g, " ")
+      .trim() || ""
+  );
+}
+
+function uniqueStrings(values: string[]): string[] {
+  return [
+    ...new Set(
+      values
+        .map((value) => value.trim())
+        .filter(Boolean)
+    ),
+  ];
+}
+
 export default function ToolSchema({ tool }: Props) {
-  const softwareSchema = {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: tool.title,
-    description: tool.description,
-    applicationCategory: "UtilitiesApplication",
+  const url = `${SITE_URL}/${tool.slug}`;
+
+  /*
+   * ============================================================
+   * BASIC TOOL INFORMATION
+   * ============================================================
+   */
+
+  const title =
+    cleanText(tool.title) ||
+    cleanText(tool.seoTitle) ||
+    SITE_NAME;
+
+  const description =
+    cleanText(tool.seoDescription) ||
+    cleanText(tool.description) ||
+    cleanText(tool.heroDescription);
+
+  /*
+   * ============================================================
+   * FEATURES
+   * ============================================================
+   */
+
+  const features = uniqueStrings([
+    ...tool.features.map(
+      (feature) => feature.title
+    ),
+
+    ...(tool.capabilities?.supportsQuality
+      ? ["Adjustable output quality"]
+      : []),
+
+    ...(tool.capabilities?.supportsMultipleFiles
+      ? ["Multiple file support"]
+      : []),
+
+    ...(tool.capabilities?.supportsBatch
+      ? ["Batch processing"]
+      : []),
+
+    ...(tool.privacyConfig?.isClientSide
+      ? ["Browser-based processing"]
+      : []),
+
+    ...(tool.privacyConfig?.noRegistration
+      ? ["No registration required"]
+      : []),
+  ]);
+
+  /*
+   * ============================================================
+   * KEYWORDS
+   * ============================================================
+   */
+
+  const keywords = uniqueStrings([
+    ...(tool.keywords ?? []),
+
+    ...(tool.seo?.secondaryKeywords ?? []),
+
+    ...(tool.seo?.keywordVariants ?? []),
+
+    tool.from,
+    tool.to,
+    `${tool.from} to ${tool.to}`,
+    `${tool.from} to ${tool.to} converter`,
+  ]);
+
+  /*
+   * ============================================================
+   * ORGANIZATION
+   * ============================================================
+   */
+
+  const organization = {
+    "@type": "Organization",
+
+    "@id": `${SITE_URL}#organization`,
+
+    name: SITE_NAME,
+
+    url: SITE_URL,
+
+    logo: {
+      "@type": "ImageObject",
+
+      url: OG_IMAGE,
+
+      width: 1200,
+
+      height: 630,
+    },
+  };
+
+  /*
+   * ============================================================
+   * WEBSITE
+   * ============================================================
+   */
+
+  const website = {
+    "@type": "WebSite",
+
+    "@id": `${SITE_URL}#website`,
+
+    name: SITE_NAME,
+
+    url: SITE_URL,
+
+    inLanguage: "en",
+
+    publisher: {
+      "@id": `${SITE_URL}#organization`,
+    },
+  };
+
+  /*
+   * ============================================================
+   * PAGE IMAGE
+   * ============================================================
+   */
+
+  const image = {
+    "@type": "ImageObject",
+
+    "@id": `${url}#image`,
+
+    url: OG_IMAGE,
+
+    contentUrl: OG_IMAGE,
+
+    width: 1200,
+
+    height: 630,
+
+    caption: `${tool.title} - PNG JPG Convert`,
+  };
+
+  /*
+   * ============================================================
+   * SOFTWARE APPLICATION
+   * ============================================================
+   */
+
+  const softwareApplication: Record<
+    string,
+    unknown
+  > = {
+    "@type":
+      tool.schema?.schemaType === "WebApplication"
+        ? "WebApplication"
+        : "SoftwareApplication",
+
+    "@id": `${url}#software`,
+
+    name: title,
+
+    description,
+
+    url,
+
+    image: {
+      "@id": `${url}#image`,
+    },
+
+    applicationCategory:
+      tool.schema?.schemaCategory ||
+      "UtilitiesApplication",
+
+    applicationSubCategory:
+      `${tool.from} to ${tool.to} ${tool.mode}`,
+
     operatingSystem: "Any",
-    browserRequirements: "Requires JavaScript",
-    url: `https://pngjpgconvert.com/${tool.slug}`,
-    image: "https://pngjpgconvert.com/og-image.png",
-    softwareVersion: "1.0",
+
+    browserRequirements:
+      "Requires a modern web browser with JavaScript enabled",
+
+    isAccessibleForFree: true,
+
+    inLanguage: "en",
+
+    author: {
+      "@id": `${SITE_URL}#organization`,
+    },
+
+    publisher: {
+      "@id": `${SITE_URL}#organization`,
+    },
+
+    mainEntityOfPage: {
+      "@id": url,
+    },
+
+    featureList: features,
+
     offers: {
       "@type": "Offer",
+
       price: "0",
+
       priceCurrency: "USD",
-      availability: "https://schema.org/InStock",
-      validFrom: "2024-01-01",
+
+      availability:
+        "https://schema.org/InStock",
+
+      url,
     },
-    author: {
-      "@type": "Organization",
-      name: "PNG JPG Convert",
-      url: "https://pngjpgconvert.com",
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "PNG JPG Convert",
-      url: "https://pngjpgconvert.com",
-    },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.8",
-      ratingCount: "2500",
-      bestRating: "5",
-      worstRating: "1",
-    },
-    featureList: tool.features.map((feature) => feature.title),
   };
 
-  const webPageSchema = {
-    "@context": "https://schema.org",
+  /*
+   * ============================================================
+   * KEYWORDS
+   * ============================================================
+   */
+
+  if (keywords.length > 0) {
+    softwareApplication.keywords =
+      keywords.join(", ");
+  }
+
+  /*
+   * ============================================================
+   * PRIVACY INFORMATION
+   * ============================================================
+   */
+
+  if (
+    tool.privacyConfig?.isClientSide
+  ) {
+    softwareApplication.processingMode =
+      "Client-side browser processing";
+  }
+
+  /*
+   * ============================================================
+   * WEB PAGE
+   * ============================================================
+   */
+
+  const webPage: Record<
+    string,
+    unknown
+  > = {
     "@type": "WebPage",
-    name: tool.title,
-    headline: tool.heroTitle,
-    description: tool.heroDescription,
-    url: `https://pngjpgconvert.com/${tool.slug}`,
+
+    "@id": url,
+
+    url,
+
+    name: title,
+
+    headline:
+      cleanText(tool.heroTitle) ||
+      title,
+
+    description:
+      cleanText(tool.heroDescription) ||
+      description,
+
     inLanguage: "en",
+
     isPartOf: {
-      "@type": "WebSite",
-      name: "PNG JPG Convert",
-      url: "https://pngjpgconvert.com",
+      "@id": `${SITE_URL}#website`,
     },
-    primaryImageOfPage: {
-      "@type": "ImageObject",
-      url: "https://pngjpgconvert.com/og-image.png",
-      width: "1200",
-      height: "630",
+
+    mainEntity: {
+      "@id": `${url}#software`,
     },
+
     about: {
-      "@type": "Thing",
-      name: tool.title,
-      description: tool.description,
+      "@id": `${url}#software`,
     },
-    audience: {
-      "@type": "Audience",
-      audienceType: "General Users",
+
+    primaryImageOfPage: {
+      "@id": `${url}#image`,
+    },
+
+    publisher: {
+      "@id": `${SITE_URL}#organization`,
     },
   };
 
-  const howToSchema = {
+  /*
+   * ============================================================
+   * CATEGORY
+   * ============================================================
+   */
+
+  if (tool.category) {
+    webPage.about = [
+      {
+        "@id": `${url}#software`,
+      },
+
+      {
+        "@type": "Thing",
+
+        name: tool.category,
+      },
+    ];
+  }
+
+  /*
+   * ============================================================
+   * AUDIENCE
+   * ============================================================
+   */
+
+  webPage.audience = {
+    "@type": "Audience",
+
+    audienceType:
+      tool.seo?.targetAudience?.length
+        ? tool.seo.targetAudience.join(", ")
+        : "General users",
+  };
+
+  /*
+   * ============================================================
+   * CONNECTED SCHEMA GRAPH
+   * ============================================================
+   *
+   * Organization
+   *      ↓
+   * WebSite
+   *      ↓
+   * WebPage
+   *      ↓
+   * SoftwareApplication
+   *
+   * FAQ and HowTo are intentionally excluded because
+   * they are generated by their own schema components.
+   */
+
+  const schema = {
     "@context": "https://schema.org",
-    "@type": "HowTo",
-    name: `How to ${tool.title}`,
-    description: tool.heroDescription,
-    step: [
-      {
-        "@type": "HowToStep",
-        position: 1,
-        name: "Upload your image",
-        text: "Upload your image file using the upload button or drag and drop it into the upload area.",
-      },
-      {
-        "@type": "HowToStep",
-        position: 2,
-        name: "Choose output format",
-        text: "Select your desired output format from the available options.",
-      },
-      {
-        "@type": "HowToStep",
-        position: 3,
-        name: "Convert and download",
-        text: "Click the convert button and download your converted image instantly.",
-      },
+
+    "@graph": [
+      organization,
+      website,
+      image,
+      webPage,
+      softwareApplication,
     ],
   };
 
-  const faqSchema =
-    tool.faq.length > 0
-      ? {
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          mainEntity: tool.faq.map((item) => ({
-            "@type": "Question",
-            name: item.question,
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: item.answer,
-            },
-          })),
-        }
-      : null;
-
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(softwareSchema),
-        }}
-      />
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(webPageSchema),
-        }}
-      />
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(howToSchema),
-        }}
-      />
-
-      {faqSchema && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(faqSchema),
-          }}
-        />
-      )}
-    </>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(schema),
+      }}
+    />
   );
 }

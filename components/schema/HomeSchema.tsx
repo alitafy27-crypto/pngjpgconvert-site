@@ -1,19 +1,31 @@
 export default function HomeSchema() {
+  const BASE_URL = "https://pngjpgconvert.com";
+
   const schema = [
     {
       "@context": "https://schema.org",
       "@type": "Organization",
+      "@id": `${BASE_URL}/#organization`,
       name: "PNG JPG Convert",
-      url: "https://pngjpgconvert.com",
-      logo: "https://pngjpgconvert.com/logo.png",
+      url: BASE_URL,
+      logo: {
+        "@type": "ImageObject",
+        "@id": `${BASE_URL}/#logo`,
+        url: `${BASE_URL}/logo.png`,
+        contentUrl: `${BASE_URL}/logo.png`,
+        width: 512,
+        height: 512,
+      },
       description:
-        "Free online image converter supporting PNG, JPG, WEBP, AVIF, PDF and more. Fast, secure and browser-based.",
+        "PNG JPG Convert provides free online image conversion tools for PNG, JPG, WEBP, AVIF, PDF and other formats.",
       email: "support@pngjpgconvert.com",
       contactPoint: {
         "@type": "ContactPoint",
+        "@id": `${BASE_URL}/#contact`,
         contactType: "customer support",
         email: "support@pngjpgconvert.com",
-        url: "https://pngjpgconvert.com/contact",
+        url: `${BASE_URL}/contact`,
+        availableLanguage: ["English"],
       },
       sameAs: [
         "https://twitter.com/pngjpgconvert",
@@ -25,15 +37,20 @@ export default function HomeSchema() {
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
+      "@id": `${BASE_URL}/#website`,
       name: "PNG JPG Convert",
-      url: "https://pngjpgconvert.com",
+      url: BASE_URL,
       description:
-        "Free online image converter supporting PNG, JPG, WEBP, AVIF, PDF and more.",
+        "Free online image converter for PNG, JPG, WEBP, AVIF, PDF and more. Fast, secure and browser-based.",
+      publisher: {
+        "@id": `${BASE_URL}/#organization`,
+      },
+      inLanguage: "en",
       potentialAction: {
         "@type": "SearchAction",
         target: {
           "@type": "EntryPoint",
-          urlTemplate: "https://pngjpgconvert.com/search?q={search_term_string}",
+          urlTemplate: `${BASE_URL}/search?q={search_term_string}`,
         },
         "query-input": "required name=search_term_string",
       },
@@ -41,66 +58,74 @@ export default function HomeSchema() {
 
     {
       "@context": "https://schema.org",
+      "@type": "WebPage",
+      "@id": `${BASE_URL}/#webpage`,
+      url: BASE_URL,
+      name: "Free Online Image Converter - PNG, JPG, WEBP, AVIF & PDF",
+      description:
+        "Convert PNG, JPG, WEBP, AVIF and PDF files online for free. Fast, secure image conversion directly in your browser.",
+      isPartOf: {
+        "@id": `${BASE_URL}/#website`,
+      },
+      about: {
+        "@id": `${BASE_URL}/#application`,
+      },
+      publisher: {
+        "@id": `${BASE_URL}/#organization`,
+      },
+      primaryImageOfPage: {
+        "@id": `${BASE_URL}/#ogimage`,
+      },
+      inLanguage: "en",
+    },
+
+    {
+      "@context": "https://schema.org",
       "@type": "WebApplication",
+      "@id": `${BASE_URL}/#application`,
       name: "PNG JPG Convert",
+      alternateName: "PNG JPG Image Converter",
+      url: BASE_URL,
       applicationCategory: "UtilitiesApplication",
+      applicationSubCategory: "Image Conversion",
       operatingSystem: "Any",
       browserRequirements: "Requires JavaScript",
-      url: "https://pngjpgconvert.com",
       description:
-        "Free online image converter supporting PNG, JPG, WEBP, AVIF and PDF formats. Convert images directly in your browser.",
+        "Free browser-based image conversion tools for PNG, JPG, WEBP, AVIF, PDF and other image formats.",
+      creator: {
+        "@id": `${BASE_URL}/#organization`,
+      },
+      publisher: {
+        "@id": `${BASE_URL}/#organization`,
+      },
       offers: {
         "@type": "Offer",
         price: "0",
         priceCurrency: "USD",
         availability: "https://schema.org/InStock",
-        validFrom: "2024-01-01",
-        description: "Free online image conversion tools",
       },
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: "4.8",
-        ratingCount: "2500",
-        bestRating: "5",
-        worstRating: "1",
-      },
-      screenshot: "https://pngjpgconvert.com/og-image.png",
-    },
-
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Home",
-          item: "https://pngjpgconvert.com",
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: "Free Online Image Converter",
-          item: "https://pngjpgconvert.com",
-        },
+      featureList: [
+        "PNG to JPG conversion",
+        "JPG to PNG conversion",
+        "WEBP conversion",
+        "AVIF conversion",
+        "PDF image conversion",
+        "Browser-based image conversion",
       ],
+      screenshot: {
+        "@type": "ImageObject",
+        url: `${BASE_URL}/og-image.png`,
+        contentUrl: `${BASE_URL}/og-image.png`,
+      },
     },
 
     {
       "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      name: "PNG JPG Convert",
-      applicationCategory: "UtilitiesApplication",
-      operatingSystem: "Any",
-      browserRequirements: "Requires JavaScript",
-      url: "https://pngjpgconvert.com",
-      description:
-        "Free online image converter supporting PNG, JPG, WEBP, AVIF, PDF and more. Convert images instantly.",
-      offers: {
-        "@type": "Offer",
-        price: "0",
-        priceCurrency: "USD",
-      },
+      "@type": "ImageObject",
+      "@id": `${BASE_URL}/#ogimage`,
+      url: `${BASE_URL}/og-image.png`,
+      contentUrl: `${BASE_URL}/og-image.png`,
+      caption: "PNG JPG Convert - Free Online Image Converter",
     },
   ];
 
