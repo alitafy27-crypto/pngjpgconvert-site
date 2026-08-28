@@ -1,70 +1,54 @@
 import "./globals.css";
+
 import type { Metadata, Viewport } from "next";
 import { GoogleAnalytics } from "@next/third-parties/google";
 
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
+const SITE_URL = "https://pngjpgconvert.com";
+const SITE_NAME = "PNG JPG Convert";
+const SITE_DESCRIPTION =
+  "Convert, compress, resize, crop, rotate, flip, watermark, and create PDFs from images online for free. Fast, private, and browser-based.";
+
+/**
+ * Global metadata
+ *
+ * These values apply to the entire website.
+ * Individual tool pages can override them with generateMetadata().
+ */
 export const metadata: Metadata = {
-  metadataBase: new URL("https://pngjpgconvert.com"),
+  metadataBase: new URL(SITE_URL),
 
   title: {
-    default: "PNG JPG Convert - Free Online Image Converter | 100% Private",
-    template: "%s | PNG JPG Convert - Free Online Image Converter",
+    default: `${SITE_NAME} - Free Online Image Converter`,
+    template: `%s | ${SITE_NAME}`,
   },
 
-  description:
-    "Convert PNG, JPG, WEBP, AVIF, and PDF instantly in your browser. Free, secure, and private image converter with no uploads. Fast processing, high quality, and unlimited usage.",
+  description: SITE_DESCRIPTION,
 
-  applicationName: "PNG JPG Convert",
-
-  keywords: [
-    "PNG to JPG",
-    "JPG to PNG", 
-    "WEBP Converter",
-    "AVIF Converter",
-    "PNG Converter",
-    "Image Converter",
-    "Online Image Converter",
-    "Image Compressor",
-    "Image Resizer",
-    "Crop Image",
-    "Rotate Image",
-    "Flip Image",
-    "Watermark Image",
-    "Image to PDF",
-    "PDF to Image",
-    "Merge PDF",
-    "Free Image Converter",
-    "Convert PNG to JPG",
-    "Convert JPG to PNG",
-    "Free Online Converter",
-    "Browser Image Converter",
-    "No Upload Image Converter",
-    "Private Image Converter",
-  ],
+  applicationName: SITE_NAME,
 
   authors: [
     {
-      name: "PNG JPG Convert",
-      url: "https://pngjpgconvert.com",
+      name: SITE_NAME,
+      url: SITE_URL,
     },
   ],
 
-  creator: "PNG JPG Convert",
-  publisher: "PNG JPG Convert",
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+
+  category: "technology",
 
   alternates: {
-    canonical: "https://pngjpgconvert.com",
-    languages: {
-      "en-US": "https://pngjpgconvert.com",
-    },
+    canonical: SITE_URL,
   },
 
   robots: {
     index: true,
     follow: true,
-    nocache: false,
+
     googleBot: {
       index: true,
       follow: true,
@@ -76,35 +60,35 @@ export const metadata: Metadata = {
 
   openGraph: {
     type: "website",
-    url: "https://pngjpgconvert.com",
-    title: "PNG JPG Convert - Free Online Image Converter | 100% Private",
-    description:
-      "Convert PNG, JPG, WEBP, AVIF, and PDF instantly in your browser. No uploads, no registration, completely free and secure.",
-    siteName: "PNG JPG Convert",
+    siteName: SITE_NAME,
+    url: SITE_URL,
     locale: "en_US",
-    alternateLocale: ["en_GB"],
+
+    title: `${SITE_NAME} - Free Online Image Converter`,
+
+    description:
+      "Free browser-based image conversion and editing tools. Convert, compress, resize, crop, rotate, flip, watermark, and create PDFs without uploading your files.",
+
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "PNG JPG Convert - Free Online Image Converter",
         type: "image/png",
+        alt: `${SITE_NAME} - Free Online Image Converter`,
       },
     ],
   },
 
   twitter: {
     card: "summary_large_image",
-    site: "@pngjpgconvert",
-    creator: "@pngjpgconvert",
-    title: "PNG JPG Convert - Free Online Image Converter",
+
+    title: `${SITE_NAME} - Free Online Image Converter`,
+
     description:
-      "Convert PNG, JPG, WEBP, AVIF, and PDF online instantly. 100% free, private, and no uploads required.",
-    images: {
-      url: "/og-image.png",
-      alt: "PNG JPG Convert - Free Online Image Converter",
-    },
+      "Free online image conversion and editing tools. Fast, private, and browser-based.",
+
+    images: ["/og-image.png"],
   },
 
   icons: {
@@ -115,38 +99,45 @@ export const metadata: Metadata = {
       },
       {
         url: "/favicon-32x32.png",
-        sizes: "32x32",
         type: "image/png",
+        sizes: "32x32",
       },
       {
         url: "/favicon-16x16.png",
-        sizes: "16x16",
         type: "image/png",
+        sizes: "16x16",
       },
     ],
-    shortcut: "/favicon.ico",
+
     apple: [
       {
         url: "/apple-touch-icon.png",
-        sizes: "180x180",
         type: "image/png",
-      },
-    ],
-    other: [
-      {
-        rel: "manifest",
-        url: "/site.webmanifest",
+        sizes: "180x180",
       },
     ],
   },
 
-  verification: {
-    google: "your-google-verification-code",
-  },
+  /*
+   * Add the real verification code when the site
+   * is connected to Google Search Console.
+   *
+   * verification: {
+   *   google: "REAL_GOOGLE_VERIFICATION_CODE",
+   * },
+   */
 
-  category: "technology",
+  formatDetection: {
+    telephone: false,
+  },
 };
 
+/**
+ * Global viewport configuration.
+ *
+ * Mobile-first configuration with a reasonable
+ * maximum zoom level for accessibility.
+ */
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -155,103 +146,124 @@ export const viewport: Viewport = {
   colorScheme: "light",
 };
 
+/**
+ * Organization structured data.
+ *
+ * Helps search engines understand the website
+ * and the organization behind it.
+ */
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+
+  "@id": `${SITE_URL}/#organization`,
+
+  name: SITE_NAME,
+  url: SITE_URL,
+
+  logo: {
+    "@type": "ImageObject",
+    url: `${SITE_URL}/logo.png`,
+  },
+
+  description:
+    "Free online image conversion and editing tools that work directly in the browser.",
+
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "customer support",
+    email: "support@pngjpgconvert.com",
+    url: `${SITE_URL}/contact`,
+  },
+};
+
+/**
+ * WebSite structured data.
+ *
+ * Gives search engines a clear representation
+ * of the website itself.
+ */
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+
+  "@id": `${SITE_URL}/#website`,
+
+  name: SITE_NAME,
+  url: SITE_URL,
+
+  description: SITE_DESCRIPTION,
+
+  publisher: {
+    "@id": `${SITE_URL}/#organization`,
+  },
+
+  inLanguage: "en",
+};
+
+/**
+ * Root layout.
+ */
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const organizationSchema = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "PNG JPG Convert",
-    url: "https://pngjpgconvert.com",
-    logo: "https://pngjpgconvert.com/logo.png",
-    description:
-      "Free online image converter supporting PNG, JPG, WEBP, AVIF, PDF and more. Fast, secure and browser-based.",
-    email: "support@pngjpgconvert.com",
-    contactPoint: {
-      "@type": "ContactPoint",
-      contactType: "customer support",
-      email: "support@pngjpgconvert.com",
-      url: "https://pngjpgconvert.com/contact",
-    },
-    sameAs: [
-      "https://twitter.com/pngjpgconvert",
-      "https://facebook.com/pngjpgconvert",
-      "https://pinterest.com/pngjpgconvert",
-    ],
-  };
-
-  const websiteSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "PNG JPG Convert",
-    url: "https://pngjpgconvert.com",
-    description:
-      "Free online image converter supporting PNG, JPG, WEBP, AVIF, PDF and more. Fast, secure and browser-based.",
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate:
-          "https://pngjpgconvert.com/search?q={search_term_string}",
-      },
-      "query-input": "required name=search_term_string",
-    },
-  };
-
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: "https://pngjpgconvert.com",
-      },
-    ],
-  };
-
   return (
     <html lang="en">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        {/*
+         * Establish early connections for external font resources.
+         *
+         * Keep these only if Google Fonts are actually used
+         * by the application.
+         */}
+        <link
+          rel="preconnect"
+          href="https://fonts.googleapis.com"
+        />
+
         <link
           rel="preconnect"
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
       </head>
+
       <body>
         <Header />
+
         <main>{children}</main>
+
         <Footer />
 
-        {/* Organization Schema */}
+        {/* -------------------------------------------------
+            Organization structured data
+           ------------------------------------------------- */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(organizationSchema),
+            __html: JSON.stringify(
+              organizationSchema,
+            ),
           }}
         />
 
-        {/* Website Schema */}
+        {/* -------------------------------------------------
+            WebSite structured data
+           ------------------------------------------------- */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(websiteSchema),
+            __html: JSON.stringify(
+              websiteSchema,
+            ),
           }}
         />
 
-        {/* Breadcrumb Schema */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(breadcrumbSchema),
-          }}
-        />
-
+        {/* -------------------------------------------------
+            Google Analytics
+           ------------------------------------------------- */}
         <GoogleAnalytics gaId="G-ZJ95NDYYHE" />
       </body>
     </html>

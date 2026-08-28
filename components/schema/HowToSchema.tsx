@@ -1,42 +1,275 @@
+import type { ReactElement } from "react";
+
 import type { ToolData } from "@/data/tool.types";
 
 type Props = {
   tool: ToolData;
 };
 
-const SITE_URL = "https://pngjpgconvert.com";
-const OG_IMAGE = `${SITE_URL}/og-image.png`;
+type CleanStep = {
+  name: string;
+  text: string;
+  originalIndex: number;
+};
 
-function cleanText(value: string | undefined): string {
-  return (
-    value
-      ?.replace(/\s+/g, " ")
-      .trim() || ""
+const SITE_URL = "https://pngjpgconvert.com";
+const LANGUAGE = "en";
+
+/**
+ * ------------------------------------------------------------------
+ * HELPERS
+ * ------------------------------------------------------------------
+ */
+
+/**
+ * Clean plain text before inserting it into JSON-LD.
+ *
+ * HTML is removed because HowTo structured-data text should contain
+ * readable text rather than arbitrary markup.
+ */
+function cleanText(
+  value: string | undefined,
+): string {
+  if (!value) {
+    return "";
+  }
+
+  return value
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/**
+ * Normalize a tool slug.
+ */
+function normalizeSlug(
+  slug: string | undefined,
+): string {
+  if (!slug) {
+    return "";
+  }
+
+  return slug
+    .trim()
+    .replace(/^\/+|\/+$/g, "")
+    .replace(/\/{2,}/g, "/");
+}
+
+/**
+ * Validate an ISO 8601 duration.
+ *
+ * Supported examples:
+ *
+ * PT30S
+ * PT1M
+ * PT1M30S
+ * PT5M
+ * PT1H
+ * PT1H20M
+ */
+function isValidDuration(
+  value: string,
+): boolean {
+  return /^P(?:\d+D)?(?:T(?=\d)(?:\d+H)?(?:\d+M)?(?:\d+S)?)$/.test(
+    value,
   );
 }
 
+/**
+ * Remove duplicate steps while preserving order.
+ */
+function uniqueSteps(
+  steps: CleanStep[],
+): CleanStep[] {
+  const seen = new Set<string>();
+
+  return steps.filter((step) => {
+    const key =
+      `${step.name.toLowerCase()}::${step.text.toLowerCase()}`;
+
+    if (seen.has(key)) {
+      return false;
+    }
+
+    seen.add(key);
+
+    return true;
+  });
+}
+
+/**
+ * Normalize configured requirements.
+ */
+function cleanRequirements(
+  requirements: string[] | undefined,
+): string[] {
+  if (!Array.isArray(requirements)) {
+    return [];
+  }
+
+  return [
+    ...new Set(
+      requirements
+        .map(cleanText)
+        .filter(Boolean),
+    ),
+  ];
+}
+
+/**
+ * ------------------------------------------------------------------
+ * HOWTO SCHEMA
+ * ------------------------------------------------------------------
+ */
+
 export default function HowToSchema({
   tool,
-}: Props) {
+}: Props): ReactElement | null {
   /**
-   * Do not generate HowTo structured data if the tool
-   * does not have real, visible steps.
+   * --------------------------------------------------------------
+   * ROUTE VALIDATION
+   * --------------------------------------------------------------
    */
-  if (!tool.howTo || tool.howTo.length === 0) {
+
+  const cleanSlug =
+    normalizeSlug(tool.slug);
+
+  if (!cleanSlug) {
     return null;
   }
 
-  const steps = tool.howTo
-    .map((item, index) => {
-      const name = cleanText(item.title);
-      const text = cleanText(item.description);
+  const pageUrl =
+    `${SITE_URL}/${cleanSlug}`;
 
-      if (!name || !text) {
-        return null;
-      }
+  const pageId =
+    `${pageUrl}#webpage`;
+
+  const howToId =
+    `${pageUrl}#howto`;
+
+  /**
+   * --------------------------------------------------------------
+   * VALIDATE RAW HOW-TO DATA
+   * --------------------------------------------------------------
+   */
+
+  if (
+    !Array.isArray(tool.howTo) ||
+    tool.howTo.length === 0
+  ) {
+    return null;
+  }
+
+  /**
+   * --------------------------------------------------------------
+   * CLEAN STEPS
+   * --------------------------------------------------------------
+   */
+
+  const cleanedSteps: CleanStep[] =
+    tool.howTo
+      .map((item, index) => ({
+        name: cleanText(item.title),
+        text: cleanText(item.description),
+        originalIndex: index,
+      }))
+      .filter(
+        (step) =>
+          step.name.length > 0 &&
+          step.text.length > 0,
+      );
+
+  /**
+   * --------------------------------------------------------------
+   * REMOVE DUPLICATES
+   * --------------------------------------------------------------
+   */
+
+  const validSteps =
+    uniqueSteps(cleanedSteps);
+
+  if (validSteps.length === 0) {
+    return null;
+  }
+
+  /**
+   * --------------------------------------------------------------
+   * BASIC TOOL INFORMATION
+   * --------------------------------------------------------------
+   */
+
+  const title =
+    cleanText(tool.title) ||
+    cleanText(tool.heroTitle) ||
+    "Online Tool";
+
+  const inputFormat =
+    cleanText(tool.from);
+
+  const outputFormat =
+    cleanText(tool.to);
+
+  /**
+   * --------------------------------------------------------------
+   * SEO DESCRIPTION
+   * --------------------------------------------------------------
+   */
+
+  const configuredIntroduction =
+    cleanText(
+      tool.howToConfig?.introduction,
+    );
+
+  const generatedDescription =
+    inputFormat && outputFormat
+      ? `Learn how to use ${title} to convert ${inputFormat} files to ${outputFormat} format online.`
+      : `Learn how to use ${title} online with this simple step-by-step guide.`;
+
+  const description =
+    configuredIntroduction ||
+    cleanText(tool.heroDescription) ||
+    cleanText(tool.description) ||
+    generatedDescription;
+
+  /**
+   * --------------------------------------------------------------
+   * HOW-TO NAME
+   * --------------------------------------------------------------
+   */
+
+  const howToName =
+    inputFormat && outputFormat
+      ? `How to Convert ${inputFormat} to ${outputFormat} Online`
+      : `How to Use ${title}`;
+
+  /**
+   * --------------------------------------------------------------
+   * HOW-TO STEPS
+   * --------------------------------------------------------------
+   *
+   * Every valid step receives:
+   *
+   * - unique @id
+   * - position
+   * - name
+   * - text
+   * - URL
+   */
+
+  const steps = validSteps.map(
+    ({ name, text }, index) => {
+      const stepId =
+        `${pageUrl}#step-${index + 1}`;
 
       return {
         "@type": "HowToStep",
+
+        "@id": stepId,
 
         position: index + 1,
 
@@ -44,100 +277,243 @@ export default function HowToSchema({
 
         text,
 
-        url: `${SITE_URL}/${tool.slug}#step-${index + 1}`,
+        url: stepId,
       };
-    })
-    .filter(Boolean);
+    },
+  );
 
   /**
-   * A HowTo schema without valid steps is not useful.
+   * --------------------------------------------------------------
+   * BASE SCHEMA
+   * --------------------------------------------------------------
    */
-  if (steps.length === 0) {
-    return null;
-  }
 
-  const description =
-    cleanText(tool.howToConfig?.introduction) ||
-    cleanText(tool.heroDescription) ||
-    cleanText(tool.description);
-
-  const schema: Record<string, unknown> = {
-    "@context": "https://schema.org",
-
+  const schema: Record<
+    string,
+    unknown
+  > = {
     "@type": "HowTo",
 
-    "@id": `${SITE_URL}/${tool.slug}#howto`,
+    "@id": howToId,
 
-    name: `How to Use the ${tool.title}`,
+    name: howToName,
 
     description,
 
-    url: `${SITE_URL}/${tool.slug}#how-to`,
+    url: `${pageUrl}#how-to`,
 
-    inLanguage: "en",
+    inLanguage: LANGUAGE,
+
+    isAccessibleForFree: true,
+
+    mainEntityOfPage: {
+      "@type": "WebPage",
+
+      "@id": pageId,
+    },
 
     step: steps,
   };
 
   /**
-   * Use configured duration only when it actually exists.
+   * --------------------------------------------------------------
+   * TOTAL TIME
+   * --------------------------------------------------------------
    *
-   * We intentionally do NOT hard-code PT1M because different
-   * tools can take different amounts of time.
+   * Only publish time when it is explicitly configured
+   * and is a valid ISO 8601 duration.
    */
-  if (tool.howToConfig?.estimatedTime) {
-    schema.totalTime = tool.howToConfig.estimatedTime;
-  }
 
-  /**
-   * Add requirements only when they are actually defined.
-   */
+  const estimatedTime =
+    cleanText(
+      tool.howToConfig?.estimatedTime,
+    );
+
   if (
-    tool.howToConfig?.requirements &&
-    tool.howToConfig.requirements.length > 0
+    estimatedTime &&
+    isValidDuration(estimatedTime)
   ) {
-    schema.supply =
-      tool.howToConfig.requirements.map((requirement) => ({
-        "@type": "HowToSupply",
-        name: requirement,
-      }));
+    schema.totalTime =
+      estimatedTime;
   }
 
   /**
-   * Add difficulty information when available.
-   */
-  if (tool.howToConfig?.difficulty) {
-    schema.tool =
-      tool.howToConfig.difficulty;
-  }
-
-  /**
-   * Use the site's real image as the step image.
+   * --------------------------------------------------------------
+   * ESTIMATED COST
+   * --------------------------------------------------------------
    *
-   * The image is kept consistent across steps rather than
-   * inventing separate images that do not exist.
+   * The website's tool usage is free.
+   *
+   * We only expose zero cost for the actual online procedure.
    */
-  const validSteps = steps as Array<Record<string, unknown>>;
 
-  for (const step of validSteps) {
-    step.image = {
-      "@type": "ImageObject",
+  schema.estimatedCost = {
+    "@type": "MonetaryAmount",
 
-      url: OG_IMAGE,
+    currency: "USD",
 
-      contentUrl: OG_IMAGE,
+    value: 0,
+  };
 
-      width: 1200,
+  /**
+   * --------------------------------------------------------------
+   * YIELD
+   * --------------------------------------------------------------
+   */
 
-      height: 630,
+  const result =
+    inputFormat && outputFormat
+      ? `Converted ${outputFormat} file`
+      : "Completed result";
+
+  schema.yield = result;
+
+  /**
+   * --------------------------------------------------------------
+   * ABOUT
+   * --------------------------------------------------------------
+   */
+
+  if (
+    inputFormat ||
+    outputFormat
+  ) {
+    schema.about = {
+      "@type": "Thing",
+
+      name:
+        inputFormat && outputFormat
+          ? `${inputFormat} to ${outputFormat} conversion`
+          : "Online file conversion",
     };
   }
+
+  /**
+   * --------------------------------------------------------------
+   * REQUIREMENTS / SUPPLIES
+   * --------------------------------------------------------------
+   *
+   * Only configured requirements are published.
+   *
+   * We do not invent:
+   *
+   * - Internet connection
+   * - Browser
+   * - Image editor
+   * - Hardware
+   *
+   * unless they actually exist in the tool configuration.
+   */
+
+  const requirements =
+    cleanRequirements(
+      tool.howToConfig?.requirements,
+    );
+
+  if (requirements.length > 0) {
+    schema.supply =
+      requirements.map(
+        (requirement) => ({
+          "@type": "HowToSupply",
+
+          name: requirement,
+        }),
+      );
+  }
+
+  /**
+   * --------------------------------------------------------------
+   * OPTIONAL AUDIENCE
+   * --------------------------------------------------------------
+   */
+
+  const targetAudience =
+    Array.isArray(
+      tool.seo?.targetAudience,
+    )
+      ? [
+          ...new Set(
+            tool.seo.targetAudience
+              .map(cleanText)
+              .filter(Boolean),
+          ),
+        ]
+      : [];
+
+  if (
+    targetAudience.length > 0
+  ) {
+    schema.audience =
+      targetAudience.map(
+        (audienceType) => ({
+          "@type": "Audience",
+
+          audienceType,
+        }),
+      );
+  }
+
+  /**
+   * --------------------------------------------------------------
+   * OPTIONAL KEYWORDS
+   * --------------------------------------------------------------
+   */
+
+  const keywords = [
+    cleanText(
+      tool.seo?.primaryKeyword,
+    ),
+
+    ...(tool.seo?.secondaryKeywords ??
+      []),
+
+    ...(tool.seo?.keywordVariants ??
+      []),
+  ]
+    .map(cleanText)
+    .filter(Boolean);
+
+  const uniqueKeywords = [
+    ...new Set(keywords),
+  ];
+
+  if (
+    uniqueKeywords.length > 0
+  ) {
+    schema.keywords =
+      uniqueKeywords.join(", ");
+  }
+
+  /**
+   * --------------------------------------------------------------
+   * GRAPH
+   * --------------------------------------------------------------
+   *
+   * HowTo references the WebPage entity already defined by
+   * ToolSchema instead of creating a competing duplicate.
+   */
+
+  const graph = {
+    "@context":
+      "https://schema.org",
+
+    "@graph": [
+      schema,
+    ],
+  };
+
+  /**
+   * --------------------------------------------------------------
+   * OUTPUT
+   * --------------------------------------------------------------
+   */
 
   return (
     <script
       type="application/ld+json"
       dangerouslySetInnerHTML={{
-        __html: JSON.stringify(schema),
+        __html:
+          JSON.stringify(graph),
       }}
     />
   );

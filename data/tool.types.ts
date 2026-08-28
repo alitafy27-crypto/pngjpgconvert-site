@@ -1,73 +1,56 @@
-
 /**
- * ------------------------------------------------------------------
- * BASIC CONTENT TYPES
- * ------------------------------------------------------------------
+ * =====================================================================
+ * TOOL TYPES
+ * =====================================================================
+ *
+ * Single source of truth for the application's tool architecture.
+ *
+ * This file defines:
+ * - Tool identity
+ * - Conversion capabilities
+ * - SEO metadata
+ * - Structured data configuration
+ * - FAQ / HowTo configuration
+ * - Internal linking
+ * - Privacy / security
+ * - Content quality
+ * - Analytics
+ * - Availability
+ *
+ * IMPORTANT:
+ * SEO-related fields should describe REAL page/content data.
+ * Do not populate fields merely to manipulate search engines.
+ * =====================================================================
  */
 
-export type Feature = {
-  title: string;
-  description: string;
-};
+/* =====================================================================
+ * BASIC TYPES
+ * ===================================================================== */
 
-export type FAQItem = {
-  question: string;
-  answer: string;
+export type ContentStatus =
+  | "draft"
+  | "published"
+  | "archived";
 
-  /**
-   * Optional classification for content organization,
-   * filtering and future SEO/content systems.
-   */
-  category?:
-    | "general"
-    | "privacy"
-    | "format"
-    | "quality"
-    | "technical"
-    | "limits";
+export type Priority =
+  | "low"
+  | "medium"
+  | "high"
+  | "critical";
 
-  /**
-   * Helps prioritize the most useful questions.
-   */
-  priority?: number;
-};
+export type LanguageCode = string;
 
-export type HowToStep = {
-  title: string;
-  description: string;
-};
+export type ProcessingStatus =
+  | "idle"
+  | "queued"
+  | "processing"
+  | "completed"
+  | "failed"
+  | "cancelled";
 
-export type ComparisonItem = {
-  feature: string;
-  from: string;
-  to: string;
-};
-
-export type RelatedTool = {
-  title: string;
-  href: string;
-
-  /**
-   * Optional relationship type.
-   */
-  relation?:
-    | "alternative"
-    | "related"
-    | "conversion"
-    | "next"
-    | "recommended";
-
-  /**
-   * Optional relevance score.
-   */
-  priority?: number;
-};
-
-/**
- * ------------------------------------------------------------------
+/* =====================================================================
  * TOOL MODES
- * ------------------------------------------------------------------
- */
+ * ===================================================================== */
 
 export type ToolMode =
   | "convert"
@@ -82,22 +65,26 @@ export type ToolMode =
   | "pdf-merge"
   | "merge-images";
 
-/**
- * ------------------------------------------------------------------
+/* =====================================================================
  * PROCESSING
- * ------------------------------------------------------------------
- */
+ * ===================================================================== */
 
 export type ProcessingMode =
   | "browser"
   | "server"
   | "hybrid";
 
-/**
- * ------------------------------------------------------------------
- * SEARCH INTENT
- * ------------------------------------------------------------------
- */
+export type ProcessingStrategy =
+  | "canvas"
+  | "webcodecs"
+  | "wasm"
+  | "native-browser"
+  | "server"
+  | "hybrid";
+
+/* =====================================================================
+ * SEO
+ * ===================================================================== */
 
 export type SearchIntent =
   | "convert"
@@ -108,415 +95,807 @@ export type SearchIntent =
   | "download"
   | "learn";
 
-/**
- * ------------------------------------------------------------------
- * SEO CONTENT
- * ------------------------------------------------------------------
- */
+/* =====================================================================
+ * CONTENT
+ * ===================================================================== */
 
-export type ToolContent = {
-  /**
-   * Main introductory paragraph.
-   */
-  introduction: string;
+export type Feature = {
+  title: string;
+  description: string;
+  icon?: string;
+  priority?: number;
+};
 
-  /**
-   * Explains the main reason/use case for the tool.
-   */
-  whyConvert: string;
+export type ToolContentSection = {
+  title: string;
+  content: string;
+  id?: string;
+  priority?: number;
+};
 
-  /**
-   * Explains why users should choose this tool.
-   */
-  whyChoose: string;
+/* =====================================================================
+ * FAQ
+ * ===================================================================== */
 
-  /**
-   * Explains the relevant format/tool comparison.
-   */
-  comparisonText: string;
+export type FAQCategory =
+  | "general"
+  | "privacy"
+  | "format"
+  | "quality"
+  | "technical"
+  | "limits"
+  | "compatibility"
+  | "usage";
 
-  /**
-   * Privacy explanation.
-   */
-  privacy: string;
-
-  /**
-   * Closing content.
-   */
-  conclusion: string;
-
-  /**
-   * Additional search-focused content.
-   */
-  useCases?: string[];
-
-  /**
-   * Practical tips users may find useful.
-   */
-  tips?: string[];
-
-  /**
-   * Best use cases for the tool.
-   */
-  bestFor?: string[];
-
-  /**
-   * Situations where another tool may be more appropriate.
-   */
-  notIdealFor?: string[];
-
-  /**
-   * Common user mistakes.
-   */
-  commonMistakes?: string[];
-
-  /**
-   * Troubleshooting information.
-   */
-  troubleshooting?: string[];
+export type FAQItem = {
+  question: string;
+  answer: string;
+  category?: FAQCategory;
+  priority?: number;
+  id?: string;
 };
 
 /**
- * ------------------------------------------------------------------
- * SEO CONFIGURATION
- * ------------------------------------------------------------------
+ * Dedicated FAQ Schema configuration.
+ *
+ * This controls structured-data generation without mixing
+ * presentation/content data with Schema settings.
  */
+export type FAQSchemaConfig = {
+  enabled?: boolean;
+
+  /**
+   * Optional limit to prevent excessive FAQ structured data.
+   */
+  maxItems?: number;
+
+  /**
+   * Main FAQ topic/category.
+   */
+  category?: FAQCategory;
+
+  /**
+   * Explicit language override.
+   */
+  language?: LanguageCode;
+};
+
+/* =====================================================================
+ * HOW TO
+ * ===================================================================== */
+
+export type HowToStep = {
+  title: string;
+  description: string;
+
+  /**
+   * Stable identifier used for internal anchors and Schema @id.
+   */
+  id?: string;
+
+  /**
+   * Optional visual explanation for this step.
+   */
+  image?: string;
+
+  /**
+   * Optional estimated duration in ISO 8601 format.
+   *
+   * Example:
+   * PT10S
+   * PT1M
+   * PT2M30S
+   */
+  timeRequired?: string;
+
+  /**
+   * Optional practical tip shown with the step.
+   */
+  tip?: string;
+};
+
+export type ToolDifficulty =
+  | "easy"
+  | "medium"
+  | "advanced";
+
+export type ToolHowTo = {
+  estimatedTime?: string;
+  totalSteps?: number;
+  difficulty?: ToolDifficulty;
+
+  requirements?: string[];
+
+  introduction?: string;
+  conclusion?: string;
+
+  tips?: string[];
+
+  commonMistakes?: string[];
+  troubleshooting?: string[];
+
+  /**
+   * Optional final result description.
+   */
+  result?: string;
+
+  /**
+   * Optional educational level.
+   */
+  educationalLevel?: string;
+
+  /**
+   * Dedicated HowTo Schema configuration.
+   */
+  schemaConfig?: HowToSchemaConfig;
+};
+
+/**
+ * Dedicated HowTo Schema configuration.
+ */
+export type HowToSchemaConfig = {
+  enabled?: boolean;
+
+  /**
+   * Whether step images should be included
+   * when real images exist.
+   */
+  includeStepImages?: boolean;
+
+  /**
+   * Whether step videos should be included
+   * when real videos exist.
+   */
+  includeStepVideos?: boolean;
+
+  /**
+   * Whether actual digital/physical tools should
+   * be represented in Schema.
+   */
+  includeTools?: boolean;
+
+  /**
+   * Whether supplies/requirements should be included.
+   */
+  includeSupplies?: boolean;
+
+  /**
+   * Explicit language override.
+   */
+  language?: LanguageCode;
+};
+
+/* =====================================================================
+ * COMPARISON
+ * ===================================================================== */
+
+export type ComparisonItem = {
+  feature: string;
+  from: string;
+  to: string;
+  description?: string;
+  priority?: number;
+};
+
+/* =====================================================================
+ * RELATED TOOLS
+ * ===================================================================== */
+
+export type RelatedToolRelation =
+  | "alternative"
+  | "related"
+  | "conversion"
+  | "next"
+  | "recommended";
+
+export type RelatedTool = {
+  title: string;
+  href: string;
+
+  relation?: RelatedToolRelation;
+  priority?: number;
+
+  description?: string;
+  icon?: string;
+
+  /**
+   * Explicit SEO-friendly anchor text.
+   *
+   * If omitted, title may be used as fallback.
+   */
+  anchorText?: string;
+};
+
+/* =====================================================================
+ * INTERNAL LINKS
+ * ===================================================================== */
+
+export type InternalLink = {
+  href: string;
+  anchorText: string;
+
+  /**
+   * Optional contextual description.
+   */
+  description?: string;
+
+  /**
+   * Higher priority links can be surfaced earlier.
+   */
+  priority?: number;
+
+  /**
+   * Optional semantic relationship.
+   */
+  relation?:
+    | "related"
+    | "parent"
+    | "child"
+    | "alternative"
+    | "conversion"
+    | "guide";
+};
+
+/* =====================================================================
+ * FILE FORMATS
+ * ===================================================================== */
+
+export type FileCategory =
+  | "image"
+  | "document"
+  | "pdf";
+
+export type ImageFormat =
+  | "PNG"
+  | "JPG"
+  | "JPEG"
+  | "WEBP"
+  | "AVIF"
+  | "GIF"
+  | "BMP"
+  | "TIFF"
+  | "SVG";
+
+export type DocumentFormat =
+  | "PDF";
+
+export type FileFormat =
+  | ImageFormat
+  | DocumentFormat;
+
+/* =====================================================================
+ * MIME TYPES
+ * ===================================================================== */
+
+export type ImageMimeType =
+  | "image/png"
+  | "image/jpeg"
+  | "image/webp"
+  | "image/avif"
+  | "image/gif"
+  | "image/bmp"
+  | "image/tiff"
+  | "image/svg+xml";
+
+export type DocumentMimeType =
+  | "application/pdf";
+
+export type FileMimeType =
+  | ImageMimeType
+  | DocumentMimeType;
+
+/* =====================================================================
+ * CAPABILITIES
+ * ===================================================================== */
+
+export type ToolCapabilities = {
+  inputFormats?: FileFormat[];
+  outputFormats?: FileFormat[];
+
+  inputMimeTypes?: FileMimeType[];
+  outputMimeTypes?: FileMimeType[];
+
+  maxFileSize?: string;
+  maxFiles?: number;
+
+  maxWidth?: number;
+  maxHeight?: number;
+
+  supportsMultipleFiles?: boolean;
+  supportsBatch?: boolean;
+  supportsQuality?: boolean;
+  supportsTransparency?: boolean;
+  supportsAnimation?: boolean;
+  supportsLossless?: boolean;
+  supportsLossy?: boolean;
+  supportsDragAndDrop?: boolean;
+  supportsClipboard?: boolean;
+  supportsMobile?: boolean;
+  supportsDesktop?: boolean;
+  supportsBrowserProcessing?: boolean;
+
+  /**
+   * Indicates genuine offline capability.
+   */
+  supportsOffline?: boolean;
+
+  supportsPreview?: boolean;
+  supportsCustomFilename?: boolean;
+  supportsMetadataPreservation?: boolean;
+  supportsExif?: boolean;
+
+  /**
+   * Progressive Web App support.
+   *
+   * This is a product capability, not a direct SEO signal.
+   */
+  supportsProgressiveWebApp?: boolean;
+
+  /**
+   * UI capability.
+   */
+  supportsDarkMode?: boolean;
+};
+
+/* =====================================================================
+ * LIMITS
+ * ===================================================================== */
+
+export type ToolLimits = {
+  maxFileSizeBytes?: number;
+  maxFiles?: number;
+  maxTotalSizeBytes?: number;
+
+  maxWidth?: number;
+  maxHeight?: number;
+  maxPixels?: number;
+
+  message?: string;
+};
+
+/* =====================================================================
+ * KEYWORD DATA
+ * ===================================================================== */
+
+/**
+ * Keyword research data.
+ *
+ * This is internal SEO planning data and should NOT automatically
+ * be exposed in structured data.
+ */
+export type ToolKeywordData = {
+  primaryVolume?: number;
+
+  secondaryVolumes?: Record<
+    string,
+    number
+  >;
+
+  /**
+   * Usually represented from 1 to 100.
+   */
+  keywordDifficulty?: number;
+
+  competitorKeywords?: string[];
+
+  targetKeywords?: string[];
+};
+
+/* =====================================================================
+ * SEO CONFIGURATION
+ * ===================================================================== */
 
 export type ToolSEO = {
-  /**
-   * Main target query.
-   */
   primaryKeyword?: string;
 
-  /**
-   * Supporting search queries.
-   */
   secondaryKeywords?: string[];
 
-  /**
-   * Search intent behind the page.
-   */
-  searchIntent?: SearchIntent;
-
-  /**
-   * Keyword variations and natural-language alternatives.
-   */
   keywordVariants?: string[];
 
-  /**
-   * Intended audience.
-   */
+  searchIntent?: SearchIntent;
+
   targetAudience?: string[];
 
   /**
-   * Entity/topic represented by the page.
+   * More detailed audience definitions.
+   *
+   * Example:
+   * - web designers
+   * - developers
+   * - content creators
    */
+  targetAudienceDetailed?: string[];
+
   searchEntity?: string;
 
-  /**
-   * Optional explicit canonical path.
-   */
   canonicalPath?: string;
 
-  /**
-   * Whether the page should be indexable.
-   */
   indexable?: boolean;
+  followLinks?: boolean;
+
+  language?: LanguageCode;
+
+  datePublished?: string;
+  lastUpdated?: string;
+
+  /**
+   * Date when the content was last reviewed.
+   */
+  lastReviewed?: string;
+
+  authorName?: string;
+
+  category?: string;
+
+  /**
+   * More precise classification.
+   */
+  primaryCategory?: string;
+  subCategory?: string;
+
+  /**
+   * Internal SEO research.
+   */
+  keywordData?: ToolKeywordData;
+
+  /**
+   * Optional SEO title specifically for the homepage.
+   */
+  homepageSeoTitle?: string;
+
+  /**
+   * Optional SEO title specifically for tool pages.
+   */
+  toolPageSeoTitle?: string;
+
+  /**
+   * Optional description specifically for tool pages.
+   */
+  toolPageSeoDescription?: string;
+
+  /**
+   * Custom breadcrumb label.
+   */
+  breadcrumbTitle?: string;
+};
+
+/* =====================================================================
+ * SOCIAL
+ * ===================================================================== */
+
+export type ToolSocial = {
+  image?: string;
+  imageAlt?: string;
+
+  /**
+   * Dedicated social image.
+   *
+   * Kept separate conceptually from general page images.
+   */
+  socialImage?: string;
+  socialImageAlt?: string;
+
+  locale?: string;
+
+  title?: string;
+  description?: string;
+
+  twitterCard?:
+    | "summary"
+    | "summary_large_image";
+};
+
+/* =====================================================================
+ * AUTHOR / CREDIBILITY
+ * ===================================================================== */
+
+export type ToolAuthor = {
+  name: string;
+
+  type:
+    | "Person"
+    | "Organization";
+
+  url?: string;
 };
 
 /**
- * ------------------------------------------------------------------
- * PRIVACY / TRUST
- * ------------------------------------------------------------------
+ * Rating/review information.
+ *
+ * Only populate this when genuine user reviews/ratings exist.
  */
+export type ToolReviews = {
+  ratingValue: number;
+  reviewCount: number;
+
+  bestRating?: number;
+  worstRating?: number;
+};
+
+/* =====================================================================
+ * PRIVACY
+ * ===================================================================== */
 
 export type ToolPrivacy = {
-  /**
-   * How files are processed.
-   */
   processingMode?: ProcessingMode;
 
-  /**
-   * True when processing happens directly in the browser.
-   */
   isClientSide?: boolean;
-
-  /**
-   * Whether files need to be uploaded.
-   */
   uploadRequired?: boolean;
 
-  /**
-   * Short privacy message for the UI.
-   */
   privacySummary?: string;
-
-  /**
-   * Additional security information.
-   */
   securityNote?: string;
 
-  /**
-   * Whether files are retained.
-   */
   dataRetention?: string;
 
-  /**
-   * Whether the tool can work without an internet connection
-   * after the required application assets are available.
-   */
   offlineCapable?: boolean;
-
-  /**
-   * Show a privacy badge.
-   */
   privacyBadge?: boolean;
 
-  /**
-   * Trust points displayed near the tool.
-   */
   trustPoints?: string[];
 
-  /**
-   * Whether registration is required.
-   */
   noRegistration?: boolean;
+
+  filesSentToServer?: boolean;
+  temporaryStorage?: boolean;
+
+  retentionPeriod?: string;
 };
 
-/**
- * ------------------------------------------------------------------
- * TOOL CAPABILITIES
- * ------------------------------------------------------------------
- */
+/* =====================================================================
+ * PROCESSING CONFIGURATION
+ * ===================================================================== */
 
-export type ToolCapabilities = {
-  /**
-   * Supported source formats.
-   */
-  inputFormats?: string[];
+export type ToolProcessing = {
+  mode?: ProcessingMode;
 
-  /**
-   * Supported output formats.
-   */
-  outputFormats?: string[];
+  strategy?: ProcessingStrategy;
 
-  /**
-   * Optional maximum file size.
-   */
-  maxFileSize?: string;
+  preferClientSide?: boolean;
+  allowServerFallback?: boolean;
 
-  /**
-   * Multiple files in one operation.
-   */
-  supportsMultipleFiles?: boolean;
+  serverFallbackThreshold?: string;
 
-  /**
-   * Batch processing.
-   */
-  supportsBatch?: boolean;
+  timeout?: string;
 
-  /**
-   * Quality controls.
-   */
-  supportsQuality?: boolean;
-
-  /**
-   * Transparent image support.
-   */
-  supportsTransparency?: boolean;
-
-  /**
-   * Animated image support.
-   */
-  supportsAnimation?: boolean;
-
-  /**
-   * Lossless processing.
-   */
-  supportsLossless?: boolean;
-
-  /**
-   * Lossy processing.
-   */
-  supportsLossy?: boolean;
+  performanceNote?: string;
 };
 
-/**
- * ------------------------------------------------------------------
- * HOW-TO CONFIGURATION
- * ------------------------------------------------------------------
- */
+/* =====================================================================
+ * UI
+ * ===================================================================== */
 
-export type ToolHowTo = {
-  /**
-   * Estimated user completion time.
-   */
-  estimatedTime?: string;
-
-  /**
-   * Number of steps.
-   */
-  totalSteps?: number;
-
-  /**
-   * User-facing difficulty.
-   */
-  difficulty?: "easy" | "medium" | "advanced";
-
-  /**
-   * Requirements needed before starting.
-   */
-  requirements?: string[];
-
-  /**
-   * Introductory explanation.
-   */
-  introduction?: string;
-
-  /**
-   * Closing explanation.
-   */
-  conclusion?: string;
-
-  /**
-   * Practical tips.
-   */
-  tips?: string[];
-
-  /**
-   * Common mistakes.
-   */
-  commonMistakes?: string[];
-
-  /**
-   * Troubleshooting information.
-   */
-  troubleshooting?: string[];
+export type ToolUI = {
+  showHero?: boolean;
+  showStats?: boolean;
+  showBenefits?: boolean;
+  showHowTo?: boolean;
+  showComparison?: boolean;
+  showSupportedFormats?: boolean;
+  showFAQ?: boolean;
+  showRelatedTools?: boolean;
+  showContent?: boolean;
+  showPrivacy?: boolean;
+  showPreview?: boolean;
+  showFileSizeComparison?: boolean;
+  showProgress?: boolean;
 };
 
-/**
- * ------------------------------------------------------------------
- * INTERNAL LINKING
- * ------------------------------------------------------------------
- */
-
-export type ToolLinks = {
-  /**
-   * Existing related tools.
-   */
-  relatedTools?: RelatedTool[];
-
-  /**
-   * Related blog/article URLs.
-   */
-  relatedArticles?: RelatedTool[];
-
-  /**
-   * Parent category/tool page.
-   */
-  parentTool?: string;
-
-  /**
-   * Category slug.
-   */
-  categorySlug?: string;
-
-  /**
-   * Main category/hub URL.
-   */
-  hubUrl?: string;
-
-  /**
-   * High-priority related tools.
-   */
-  popularRelatedTools?: RelatedTool[];
-
-  /**
-   * Alternative conversions.
-   */
-  conversionAlternatives?: RelatedTool[];
-
-  /**
-   * Suggested next tools.
-   */
-  nextTools?: RelatedTool[];
-
-  /**
-   * Contextual links inside content.
-   */
-  contextualLinks?: RelatedTool[];
-};
-
-/**
- * ------------------------------------------------------------------
+/* =====================================================================
  * STRUCTURED DATA
- * ------------------------------------------------------------------
+ * ===================================================================== */
+
+export type SchemaType =
+  | "WebApplication"
+  | "SoftwareApplication"
+  | "WebPage";
+
+export type SchemaApplicationCategory =
+  | "UtilitiesApplication"
+  | "MultimediaApplication"
+  | "BusinessApplication"
+  | "ProductivityApplication"
+  | "DeveloperApplication"
+  | "DesignApplication";
+
+/**
+ * Main Schema configuration.
  */
-
 export type ToolSchemaConfig = {
-  /**
-   * Schema entity type.
-   */
-  schemaType?: string;
+  schemaType?: SchemaType;
 
-  /**
-   * Schema name.
-   */
   schemaName?: string;
-
-  /**
-   * Schema description.
-   */
   schemaDescription?: string;
 
-  /**
-   * Schema category.
-   */
+  applicationCategory?: SchemaApplicationCategory;
   schemaCategory?: string;
 
+  operatingSystem?: string;
+  browserRequirements?: string;
+
+  applicationFeature?: string;
+  featureList?: string[];
+
   /**
-   * Whether HowTo schema is enabled.
+   * Legacy/global switches.
+   *
+   * Kept for compatibility with the existing application.
    */
   howToSchemaEnabled?: boolean;
-
-  /**
-   * Whether FAQ schema is enabled.
-   */
   faqSchemaEnabled?: boolean;
-
-  /**
-   * Whether breadcrumb schema is enabled.
-   */
   breadcrumbEnabled?: boolean;
 
-  /**
-   * Whether software application schema is enabled.
-   */
   softwareApplicationSchema?: boolean;
 
-  /**
-   * Application feature description.
-   */
-  applicationFeature?: string;
+  schemaVersion?: string;
 
   /**
-   * Optional schema version.
+   * Dedicated configuration objects.
    */
-  schemaVersion?: string;
+  faqSchema?: FAQSchemaConfig;
+  howToSchema?: HowToSchemaConfig;
+  breadcrumbSchema?: BreadcrumbSchemaConfig;
 };
 
-/**
- * ------------------------------------------------------------------
+/* =====================================================================
+ * BREADCRUMB SCHEMA
+ * ===================================================================== */
+
+export type BreadcrumbSchemaConfig = {
+  enabled?: boolean;
+
+  /**
+   * Optional custom hierarchy.
+   *
+   * Example:
+   * Home > Tools > Image > PNG to JPG
+   */
+  levels?: string[];
+
+  language?: LanguageCode;
+};
+
+/* =====================================================================
+ * CONTENT QUALITY
+ * ===================================================================== */
+
+export type ToolContentQuality = {
+  /**
+   * Internal editorial score.
+   */
+  readabilityScore?: number;
+
+  /**
+   * Internal editorial metric.
+   *
+   * This should not be inserted into Schema as keyword density.
+   */
+  keywordDensity?: number;
+
+  /**
+   * Indicates whether content has been manually reviewed.
+   */
+  manuallyReviewed?: boolean;
+
+  /**
+   * Content quality status.
+   */
+  status?:
+    | "basic"
+    | "good"
+    | "excellent";
+};
+
+/* =====================================================================
+ * TOOL LINKS
+ * ===================================================================== */
+
+export type ToolLinks = {
+  relatedTools?: RelatedTool[];
+
+  relatedArticles?: RelatedTool[];
+
+  parentTool?: string;
+
+  categorySlug?: string;
+
+  hubUrl?: string;
+
+  popularRelatedTools?: RelatedTool[];
+
+  conversionAlternatives?: RelatedTool[];
+
+  nextTools?: RelatedTool[];
+
+  contextualLinks?: RelatedTool[];
+
+  /**
+   * Explicit internal links with controlled anchor text.
+   */
+  internalLinks?: InternalLink[];
+};
+
+/* =====================================================================
+ * TOOL CONTENT
+ * ===================================================================== */
+
+export type ToolContent = {
+  introduction: string;
+
+  whyConvert: string;
+
+  whyChoose: string;
+
+  comparisonText: string;
+
+  privacy: string;
+
+  conclusion: string;
+
+  /**
+   * Search-intent / long-tail content.
+   */
+  useCases?: string[];
+
+  tips?: string[];
+
+  bestFor?: string[];
+
+  notIdealFor?: string[];
+
+  commonMistakes?: string[];
+
+  troubleshooting?: string[];
+
+  sections?: ToolContentSection[];
+
+  /**
+   * Editorial quality information.
+   */
+  quality?: ToolContentQuality;
+};
+
+/* =====================================================================
+ * ANALYTICS
+ * ===================================================================== */
+
+export type ToolAnalytics = {
+  trackConversion?: boolean;
+  trackUpload?: boolean;
+  trackDownload?: boolean;
+  trackErrors?: boolean;
+  trackProcessingTime?: boolean;
+
+  /**
+   * Engagement tracking.
+   *
+   * These are analytics values, not SEO Schema properties.
+   */
+  trackEngagement?: boolean;
+};
+
+/* =====================================================================
+ * AVAILABILITY
+ * ===================================================================== */
+
+export type ToolAvailability = {
+  status?: ContentStatus;
+
+  enabled?: boolean;
+
+  releaseDate?: string;
+
+  retirementDate?: string;
+
+  note?: string;
+};
+
+/* =====================================================================
  * MAIN TOOL DATA
- * ------------------------------------------------------------------
- */
+ * ===================================================================== */
 
 export type ToolData = {
-  /**
-   * --------------------------------------------------------------
+  /* -------------------------------------------------------------------
    * Identity
-   * --------------------------------------------------------------
-   */
+   * ------------------------------------------------------------------- */
 
   slug: string;
 
@@ -530,11 +909,9 @@ export type ToolData = {
 
   heroDescription: string;
 
-  /**
-   * --------------------------------------------------------------
+  /* -------------------------------------------------------------------
    * SEO
-   * --------------------------------------------------------------
-   */
+   * ------------------------------------------------------------------- */
 
   seoTitle: string;
 
@@ -542,122 +919,180 @@ export type ToolData = {
 
   keywords: string[];
 
-  /**
-   * Advanced SEO configuration.
-   */
   seo?: ToolSEO;
 
   /**
-   * --------------------------------------------------------------
-   * Classification
-   * --------------------------------------------------------------
+   * Direct breadcrumb override.
+   *
+   * Example:
+   * "PNG to JPG Converter"
    */
+  breadcrumbTitle?: string;
+
+  /**
+   * Main publication date.
+   */
+  datePublished?: string;
+
+  /**
+   * Last meaningful content modification.
+   */
+  dateModified?: string;
+
+  /**
+   * Last editorial review.
+   */
+  lastReviewed?: string;
+
+  /**
+   * Content author.
+   */
+  author?: ToolAuthor;
+
+  /**
+   * Genuine user rating information.
+   */
+  reviews?: ToolReviews;
+
+  /* -------------------------------------------------------------------
+   * Social
+   * ------------------------------------------------------------------- */
+
+  social?: ToolSocial;
+
+  /* -------------------------------------------------------------------
+   * Classification
+   * ------------------------------------------------------------------- */
 
   category: string;
 
+  /**
+   * More precise classification.
+   */
+  primaryCategory?: string;
+
+  subCategory?: string;
+
   icon: string;
 
-  /**
-   * --------------------------------------------------------------
-   * Conversion information
-   * --------------------------------------------------------------
-   */
+  /* -------------------------------------------------------------------
+   * Conversion
+   * ------------------------------------------------------------------- */
 
-  from: string;
+  from: FileFormat;
 
-  to: string;
+  to: FileFormat;
 
-  inputMime: string;
+  inputMime: FileMimeType;
 
-  outputMime: string;
+  outputMime: FileMimeType;
 
   outputExtension: string;
 
-  /**
-   * --------------------------------------------------------------
-   * Existing capabilities
-   * --------------------------------------------------------------
-   */
+  /* -------------------------------------------------------------------
+   * Capabilities
+   * ------------------------------------------------------------------- */
 
   supportsQuality: boolean;
 
-  /**
-   * Extended capabilities.
-   */
   capabilities?: ToolCapabilities;
 
-  /**
-   * --------------------------------------------------------------
-   * Main UI content
-   * --------------------------------------------------------------
-   */
+  processing?: ToolProcessing;
+
+  limits?: ToolLimits;
+
+  /* -------------------------------------------------------------------
+   * UI
+   * ------------------------------------------------------------------- */
+
+  ui?: ToolUI;
+
+  /* -------------------------------------------------------------------
+   * Features
+   * ------------------------------------------------------------------- */
 
   features: Feature[];
 
-  /**
-   * --------------------------------------------------------------
-   * How-to content
-   * --------------------------------------------------------------
-   */
+  /* -------------------------------------------------------------------
+   * How To
+   * ------------------------------------------------------------------- */
 
   howTo: HowToStep[];
 
-  /**
-   * Extended HowTo configuration.
-   */
   howToConfig?: ToolHowTo;
 
-  /**
-   * --------------------------------------------------------------
+  /* -------------------------------------------------------------------
    * FAQ
-   * --------------------------------------------------------------
-   */
+   * ------------------------------------------------------------------- */
 
   faq: FAQItem[];
 
-  /**
-   * --------------------------------------------------------------
+  /* -------------------------------------------------------------------
    * Comparison
-   * --------------------------------------------------------------
-   */
+   * ------------------------------------------------------------------- */
 
   comparison: ComparisonItem[];
 
-  /**
-   * --------------------------------------------------------------
+  /* -------------------------------------------------------------------
    * Related tools
-   * --------------------------------------------------------------
-   */
+   * ------------------------------------------------------------------- */
 
   relatedTools: RelatedTool[];
 
-  /**
-   * Extended internal linking.
-   */
   links?: ToolLinks;
 
-  /**
-   * --------------------------------------------------------------
-   * SEO content
-   * --------------------------------------------------------------
-   */
+  /* -------------------------------------------------------------------
+   * Content
+   * ------------------------------------------------------------------- */
 
   content: ToolContent;
 
   /**
-   * --------------------------------------------------------------
-   * Privacy / trust
-   * --------------------------------------------------------------
+   * Long-tail / semantic use cases.
+   *
+   * Kept at ToolData level for easy access by UI and SEO components.
    */
+  useCases?: string[];
+
+  bestFor?: string[];
+
+  notIdealFor?: string[];
+
+  commonMistakes?: string[];
+
+  troubleshooting?: string[];
+
+  /* -------------------------------------------------------------------
+   * Privacy
+   * ------------------------------------------------------------------- */
 
   privacyConfig?: ToolPrivacy;
 
   /**
-   * --------------------------------------------------------------
-   * Structured data
-   * --------------------------------------------------------------
+   * Convenience fields for systems that need to display
+   * security/privacy information without traversing privacyConfig.
    */
+  securityNote?: string;
+
+  privacyBadge?: boolean;
+
+  retentionPeriod?: string;
+
+  /* -------------------------------------------------------------------
+   * Structured data
+   * ------------------------------------------------------------------- */
 
   schema?: ToolSchemaConfig;
-};
 
+  /* -------------------------------------------------------------------
+   * Analytics
+   * ------------------------------------------------------------------- */
+
+  analytics?: ToolAnalytics;
+
+  /* -------------------------------------------------------------------
+   * Availability
+   * ------------------------------------------------------------------- */
+
+  availability?: ToolAvailability;
+};

@@ -1,146 +1,47 @@
-
-import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 import { getTool, toolsList } from "@/data/tools";
 
-import ImageToolPage from "@/components/templates/ImageToolPage";
-
-import HeroSection from "@/components/sections/HeroSection";
-import StatsSection from "@/components/sections/StatsSection";
-import UploadSection from "@/components/sections/UploadSection";
-import BenefitsSection from "@/components/sections/BenefitsSection";
-import HowToSection from "@/components/sections/HowToSection";
-import ComparisonSection from "@/components/sections/ComparisonSection";
-import SupportedFormatsSection from "@/components/sections/SupportedFormatsSection";
-import WhyChooseSection from "@/components/sections/WhyChooseSection";
-import FAQSection from "@/components/sections/FAQSection";
-import RelatedToolsSection from "@/components/sections/RelatedToolsSection";
-import ContentSection from "@/components/sections/ContentSection";
-
-import ToolSchema from "@/components/schema/ToolSchema";
-import BreadcrumbSchema from "@/components/schema/BreadcrumbSchema";
-import FAQSchema from "@/components/schema/FAQSchema";
-import HowToSchema from "@/components/schema/HowToSchema";
-
-/**
- * ------------------------------------------------------------------
- * TYPES
- * ------------------------------------------------------------------
- */
-
-type Props = {
+type ToolPageProps = {
   params: Promise<{
     tool: string;
   }>;
 };
 
 /**
- * ------------------------------------------------------------------
- * SITE CONFIGURATION
- * ------------------------------------------------------------------
+ * Generate static routes for all registered tools.
  *
- * Keep the site identity in one place.
- */
-const SITE_URL = "https://pngjpgconvert.com";
-const SITE_NAME = "PNG JPG Convert";
-const SITE_DESCRIPTION =
-  "Free online image conversion and editing tools. Convert, compress, resize, crop, rotate, flip, watermark and work with images directly in your browser.";
-
-const OG_IMAGE = "/og-image.png";
-
-/**
- * ------------------------------------------------------------------
- * HELPERS
- * ------------------------------------------------------------------
- */
-
-/**
- * Normalize metadata text.
- *
- * Prevents accidental duplicated spaces and malformed metadata.
- */
-function cleanText(value: unknown): string {
-  if (typeof value !== "string") {
-    return "";
-  }
-
-  return value.replace(/\s+/g, " ").trim();
-}
-
-/**
- * Keep titles reasonably concise.
- *
- * The exact displayed title length depends on Google's rendering,
- * so this is only a sensible safety limit rather than a ranking rule.
- */
-function optimizeTitle(value: unknown): string {
-  const title = cleanText(value);
-
-  if (!title) {
-    return SITE_NAME;
-  }
-
-  if (title.length <= 65) {
-    return title;
-  }
-
-  return `${title.slice(0, 62).trimEnd()}...`;
-}
-
-/**
- * Keep descriptions concise and useful.
- */
-function optimizeDescription(value: unknown): string {
-  const description = cleanText(value);
-
-  if (!description) {
-    return SITE_DESCRIPTION;
-  }
-
-  if (description.length <= 160) {
-    return description;
-  }
-
-  return `${description.slice(0, 157).trimEnd()}...`;
-}
-
-/**
- * ------------------------------------------------------------------
- * STATIC PARAMS
- * ------------------------------------------------------------------
- *
- * Because your tools.ts already exports toolsList, use it directly.
- *
- * This allows Next.js to know all valid tool routes during build.
+ * SEO benefit:
+ * - Allows Next.js to statically generate every registered tool page.
+ * - Improves crawlability and initial page performance.
  */
 export function generateStaticParams() {
-  return toolsList
-    .filter((tool) => Boolean(tool?.slug))
-    .map((tool) => ({
-      tool: tool.slug,
-    }));
+  return toolsList.map((tool) => ({
+    tool: tool.slug,
+  }));
 }
 
 /**
- * ------------------------------------------------------------------
- * METADATA
- * ------------------------------------------------------------------
+ * Generate SEO metadata for the current tool.
+ *
+ * Includes:
+ * - Title
+ * - Meta description
+ * - Keywords
+ * - Canonical URL
+ * - Open Graph
+ * - Twitter Card
+ * - Robots directives
  */
-
 export async function generateMetadata({
   params,
-}: Props): Promise<Metadata> {
+}: ToolPageProps): Promise<Metadata> {
   const { tool: slug } = await params;
-
   const tool = getTool(slug);
 
-  /**
-   * Unknown routes should not receive indexable metadata.
-   */
   if (!tool) {
     return {
-      title: "Tool Not Found | PNG JPG Convert",
       robots: {
         index: false,
         follow: false,
@@ -148,104 +49,37 @@ export async function generateMetadata({
     };
   }
 
-  /**
-   * Canonical URL for this exact tool.
-   */
-  const canonicalUrl = `${SITE_URL}/${tool.slug}`;
+  const title = tool.seoTitle || tool.title;
+  const description =
+    tool.seoDescription || tool.description || tool.heroDescription;
 
-  /**
-   * Tool-specific metadata.
-   */
-  const title = optimizeTitle(
-    tool.seoTitle || tool.title
-  );
+  const canonicalPath = tool.seo?.canonicalPath;
 
-  const description = optimizeDescription(
-    tool.seoDescription ||
-      `${tool.title} - free online image tool from ${SITE_NAME}.`
-  );
+  const socialTitle = tool.social?.title ?? title;
+  const socialDescription =
+    tool.social?.description ?? description;
 
-  /**
-   * Keywords are retained for compatibility with your existing
-   * ToolData structure.
-   *
-   * They should NOT be treated as the main SEO mechanism.
-   */
-  const keywords = Array.isArray(tool.keywords)
-    ? tool.keywords
-        .map(cleanText)
-        .filter(Boolean)
-    : undefined;
-
-  /**
-   * Dynamic image alt text.
-   */
-  const imageAlt =
-    `${tool.title} - Free Online Tool | ${SITE_NAME}`;
+  const socialImage = tool.social?.image;
 
   return {
-    /**
-     * Primary SEO metadata.
-     */
     title,
+
     description,
-    keywords,
 
-    /**
-     * Canonical.
-     *
-     * Do not add hreflang until the site actually has separate
-     * localized versions of the pages.
-     */
-    alternates: {
-      canonical: canonicalUrl,
-    },
+    keywords:
+      tool.keywords?.length > 0
+        ? tool.keywords
+        : undefined,
 
-    /**
-     * Open Graph.
-     */
-    openGraph: {
-      title,
-      description,
-      url: canonicalUrl,
-      siteName: SITE_NAME,
-      locale: "en_US",
-      type: "website",
+    alternates: canonicalPath
+      ? {
+          canonical: canonicalPath,
+        }
+      : undefined,
 
-      images: [
-        {
-          url: `${SITE_URL}${OG_IMAGE}`,
-          width: 1200,
-          height: 630,
-          alt: imageAlt,
-          type: "image/png",
-        },
-      ],
-    },
-
-    /**
-     * Twitter / X.
-     */
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-
-      images: [
-        {
-          url: `${SITE_URL}${OG_IMAGE}`,
-          alt: imageAlt,
-        },
-      ],
-    },
-
-    /**
-     * Robots.
-     */
     robots: {
       index: true,
       follow: true,
-
       googleBot: {
         index: true,
         follow: true,
@@ -255,161 +89,465 @@ export async function generateMetadata({
       },
     },
 
-    /**
-     * Site identity.
-     */
-    applicationName: SITE_NAME,
+    openGraph: {
+      type: "website",
+      title: socialTitle,
+      description: socialDescription,
+      url: canonicalPath,
+      images: socialImage
+        ? [
+            {
+              url: socialImage,
+              alt: title,
+            },
+          ]
+        : undefined,
+    },
 
-    authors: [
-      {
-        name: SITE_NAME,
-        url: SITE_URL,
-      },
-    ],
-
-    creator: SITE_NAME,
-    publisher: SITE_NAME,
-
-    category: "technology",
-
-    /**
-     * Metadata base.
-     *
-     * NOTE:
-     * Ideally this should also exist globally in app/layout.tsx.
-     * Keeping it here makes this route self-contained.
-     */
-    metadataBase: new URL(SITE_URL),
+    twitter: {
+      card: socialImage
+        ? "summary_large_image"
+        : "summary",
+      title: socialTitle,
+      description: socialDescription,
+      images: socialImage ? [socialImage] : undefined,
+    },
   };
 }
 
 /**
- * ------------------------------------------------------------------
- * PAGE
- * ------------------------------------------------------------------
+ * Create structured data for the tool page.
+ *
+ * Includes:
+ * - WebPage schema
+ * - BreadcrumbList schema
+ * - FAQPage schema when FAQs exist
+ * - HowTo schema when instructions exist
  */
-
-export default async function ToolPage({
-  params,
-}: Props) {
-  const { tool: slug } = await params;
-
-  /**
-   * Get the tool from the centralized tool registry.
-   */
-  const tool = getTool(slug);
+function ToolStructuredData({
+  tool,
+}: {
+  tool: NonNullable<ReturnType<typeof getTool>>;
+}) {
+  const canonicalPath = tool.seo?.canonicalPath ?? `/tools/${tool.slug}`;
 
   /**
-   * Invalid tool URL.
+   * WebPage structured data.
    */
-  if (!tool) {
-    notFound();
+  const webPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: tool.seoTitle || tool.title,
+    description:
+      tool.seoDescription ||
+      tool.description ||
+      tool.heroDescription,
+    url: canonicalPath,
+    inLanguage: "en",
+  };
+
+  /**
+   * Breadcrumb structured data.
+   */
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Tools",
+        item: "/tools",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: tool.title,
+        item: canonicalPath,
+      },
+    ],
+  };
+
+  const schemas: Record<string, unknown>[] = [
+    webPageSchema,
+    breadcrumbSchema,
+  ];
+
+  /**
+   * FAQ structured data.
+   *
+   * Only generate it when the page actually contains visible FAQs.
+   */
+  if (tool.faq.length > 0) {
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: tool.faq.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.answer,
+        },
+      })),
+    });
+  }
+
+  /**
+   * HowTo structured data.
+   *
+   * Only generate it when the page contains actual visible instructions.
+   */
+  if (tool.howTo.length > 0) {
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      name: `How to use ${tool.title}`,
+      description:
+        tool.seoDescription ||
+        tool.description ||
+        tool.heroDescription,
+      step: tool.howTo.map((step, index) => ({
+        "@type": "HowToStep",
+        position: index + 1,
+        name: step.title,
+        text: step.description,
+      })),
+    });
   }
 
   return (
     <>
-      {/**
-       * ============================================================
-       * STRUCTURED DATA
-       * ============================================================
-       *
-       * These schemas should describe information that is actually
-       * visible on the page.
-       */}
-
-      <ToolSchema tool={tool} />
-
-      <BreadcrumbSchema
-        title={tool.title}
-        slug={tool.slug}
-      />
-
-      <FAQSchema tool={tool} />
-
-      <HowToSchema tool={tool} />
-
-      {/**
-       * ============================================================
-       * MAIN TOOL PAGE
-       * ============================================================
-       *
-       * The order is intentional:
-       *
-       * 1. Hero
-       * 2. Trust / Stats
-       * 3. Main tool
-       * 4. Benefits
-       * 5. How to use
-       * 6. Comparison
-       * 7. Supported formats
-       * 8. Why choose us / privacy
-       * 9. FAQ
-       * 10. Related tools
-       * 11. Detailed educational content
-       */}
-
-      <ImageToolPage
-        hero={
-          <HeroSection
-            tool={tool}
-          />
-        }
-
-        stats={
-          <StatsSection />
-        }
-
-        tool={
-          <UploadSection
-            tool={tool}
-          />
-        }
-
-        benefits={
-          <BenefitsSection
-            tool={tool}
-          />
-        }
-
-        howTo={
-          <HowToSection
-            tool={tool}
-          />
-        }
-
-        comparison={
-          <ComparisonSection
-            tool={tool}
-          />
-        }
-
-        supportedFormats={
-          <SupportedFormatsSection />
-        }
-
-        whyChoose={
-          <WhyChooseSection />
-        }
-
-        faq={
-          <FAQSection
-            tool={tool}
-          />
-        }
-
-        relatedTools={
-          <RelatedToolsSection
-            tool={tool}
-          />
-        }
-
-        content={
-          <ContentSection
-            tool={tool}
-          />
-        }
-      />
+      {schemas.map((schema, index) => (
+        <script
+          key={`structured-data-${index}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(schema),
+          }}
+        />
+      ))}
     </>
   );
 }
 
+/**
+ * Tool page.
+ */
+export default async function ToolPage({
+  params,
+}: ToolPageProps) {
+  const { tool: slug } = await params;
+
+  const tool = getTool(slug);
+
+  if (!tool) {
+    notFound();
+  }
+
+  const canonicalPath =
+    tool.seo?.canonicalPath ?? `/tools/${tool.slug}`;
+
+  return (
+    <>
+      <ToolStructuredData tool={tool} />
+
+      <main>
+        {/* -------------------------------------------------
+            Breadcrumb navigation
+            ------------------------------------------------- */}
+        <nav
+          aria-label="Breadcrumb"
+          className="mb-6"
+        >
+          <ol className="flex flex-wrap items-center gap-2 text-sm">
+            <li>
+              <a
+                href="/"
+                className="hover:underline"
+              >
+                Home
+              </a>
+            </li>
+
+            <li aria-hidden="true">/</li>
+
+            <li>
+              <a
+                href="/tools"
+                className="hover:underline"
+              >
+                Tools
+              </a>
+            </li>
+
+            <li aria-hidden="true">/</li>
+
+            <li aria-current="page">
+              {tool.title}
+            </li>
+          </ol>
+        </nav>
+
+        {/* -------------------------------------------------
+            Hero
+            ------------------------------------------------- */}
+        <section aria-labelledby="tool-title">
+          <h1 id="tool-title">
+            {tool.heroTitle}
+          </h1>
+
+          <p>
+            {tool.heroDescription}
+          </p>
+        </section>
+
+        {/* -------------------------------------------------
+            Main tool description
+            ------------------------------------------------- */}
+        <section
+          aria-labelledby="about-tool-title"
+        >
+          <h2 id="about-tool-title">
+            {tool.title}
+          </h2>
+
+          <p>
+            {tool.description}
+          </p>
+        </section>
+
+        {/* -------------------------------------------------
+            Features
+            ------------------------------------------------- */}
+        {tool.features.length > 0 && (
+          <section
+            aria-labelledby="features-title"
+          >
+            <h2 id="features-title">
+              Features
+            </h2>
+
+            <ul>
+              {tool.features.map(
+                (feature, index) => (
+                  <li
+                    key={
+                      feature.title ||
+                      `feature-${index}`
+                    }
+                  >
+                    <h3>
+                      {feature.title}
+                    </h3>
+
+                    <p>
+                      {feature.description}
+                    </p>
+                  </li>
+                ),
+              )}
+            </ul>
+          </section>
+        )}
+
+        {/* -------------------------------------------------
+            How to use
+            ------------------------------------------------- */}
+        {tool.howTo.length > 0 && (
+          <section
+            aria-labelledby="how-to-title"
+          >
+            <h2 id="how-to-title">
+              How to use {tool.title}
+            </h2>
+
+            <ol>
+              {tool.howTo.map(
+                (step, index) => (
+                  <li
+                    key={
+                      step.id ??
+                      `step-${index}`
+                    }
+                  >
+                    <h3>
+                      {step.title}
+                    </h3>
+
+                    <p>
+                      {step.description}
+                    </p>
+                  </li>
+                ),
+              )}
+            </ol>
+          </section>
+        )}
+
+        {/* -------------------------------------------------
+            FAQ
+            ------------------------------------------------- */}
+        {tool.faq.length > 0 && (
+          <section
+            aria-labelledby="faq-title"
+          >
+            <h2 id="faq-title">
+              Frequently Asked Questions
+            </h2>
+
+            <div>
+              {tool.faq.map(
+                (item, index) => (
+                  <details
+                    key={
+                      item.id ??
+                      `faq-${index}`
+                    }
+                  >
+                    <summary>
+                      {item.question}
+                    </summary>
+
+                    <p>
+                      {item.answer}
+                    </p>
+                  </details>
+                ),
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* -------------------------------------------------
+            Long-form SEO content
+            ------------------------------------------------- */}
+        {tool.content && (
+          <section
+            aria-labelledby="content-title"
+          >
+            <h2 id="content-title">
+              About {tool.title}
+            </h2>
+
+            {tool.content.introduction && (
+              <div>
+                <p>
+                  {tool.content.introduction}
+                </p>
+              </div>
+            )}
+
+            {tool.content.whyChoose && (
+              <section
+                aria-labelledby="why-choose-title"
+              >
+                <h3 id="why-choose-title">
+                  Why use this tool?
+                </h3>
+
+                <p>
+                  {tool.content.whyChoose}
+                </p>
+              </section>
+            )}
+
+            {tool.content.whyConvert && (
+              <section
+                aria-labelledby="why-convert-title"
+              >
+                <h3 id="why-convert-title">
+                  Why convert?
+                </h3>
+
+                <p>
+                  {tool.content.whyConvert}
+                </p>
+              </section>
+            )}
+
+            {tool.content.comparisonText && (
+              <section
+                aria-labelledby="comparison-title"
+              >
+                <h3 id="comparison-title">
+                  Comparison
+                </h3>
+
+                <p>
+                  {tool.content.comparisonText}
+                </p>
+              </section>
+            )}
+
+            {tool.content.privacy && (
+              <section
+                aria-labelledby="privacy-title"
+              >
+                <h3 id="privacy-title">
+                  Privacy
+                </h3>
+
+                <p>
+                  {tool.content.privacy}
+                </p>
+              </section>
+            )}
+
+            {tool.content.conclusion && (
+              <section
+                aria-labelledby="conclusion-title"
+              >
+                <h3 id="conclusion-title">
+                  Conclusion
+                </h3>
+
+                <p>
+                  {tool.content.conclusion}
+                </p>
+              </section>
+            )}
+          </section>
+        )}
+
+        {/* -------------------------------------------------
+            Internal navigation
+            -------------------------------------------------
+            Links to related tools can be added here later.
+            This area is intentionally kept crawlable.
+        ------------------------------------------------- */}
+        <section
+          aria-labelledby="related-tools-title"
+        >
+          <h2 id="related-tools-title">
+            More Tools
+          </h2>
+
+          <ul>
+            {toolsList
+              .filter(
+                (item) =>
+                  item.slug !== tool.slug,
+              )
+              .slice(0, 6)
+              .map((item) => (
+                <li key={item.slug}>
+                  <a
+                    href={`/tools/${item.slug}`}
+                  >
+                    {item.title}
+                  </a>
+                </li>
+              ))}
+          </ul>
+        </section>
+      </main>
+    </>
+  );
+}
