@@ -1,13 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { tools } from "@/data/tools";
+import { toolsList } from "@/data/tools";
 
 export default function AllTools() {
   return (
     <section className="py-24">
       <div className="container mx-auto px-6">
-
         <div className="text-center">
           <h2 className="text-5xl font-bold">
             All Image Tools
@@ -19,8 +18,7 @@ export default function AllTools() {
         </div>
 
         <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-
-          {Object.values(tools).map((tool) => (
+          {Object.values(toolsList).map((tool) => (
             <Link
               key={tool.slug}
               href={`/${tool.slug}`}
@@ -43,9 +41,7 @@ export default function AllTools() {
               </div>
             </Link>
           ))}
-
         </div>
-
       </div>
     </section>
   );
