@@ -1,4 +1,4 @@
-import type { ToolData } from "@/data/tool.types";
+  import type { ToolData } from "@/data/tool.types";
 
 /**
  * =====================================================================

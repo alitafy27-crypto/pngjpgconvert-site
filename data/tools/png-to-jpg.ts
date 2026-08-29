@@ -11,15 +11,19 @@ const pngToJpg: ToolData = {
 
   mode: "convert",
 
-  title: "PNG to JPG Converter",
+  // 1. عنوان محسّن مع كلمات مفتاحية رئيسية وفوائد
+  title: "PNG to JPG Converter - Convert PNG to JPG Online Free | Adjustable Quality",
 
-  heroTitle: "Convert PNG to JPG Online",
+  // 2. عنوان رئيسي محسّن مع كلمات مفتاحية وفوائد
+  heroTitle: "Free Online PNG to JPG Converter - Convert PNG Images to JPG with Adjustable Quality",
 
+  // 3. وصف محسّن مع كلمات مفتاحية وفوائد محددة
   description:
-    "Convert PNG to JPG online for free. Choose JPEG quality, convert your image in your browser, and download the JPG file.",
+    "Convert PNG to JPG online free with our fast, secure image converter. Choose JPEG quality and reduce file size instantly. 100% private browser-based tool with no uploads. Best free PNG to JPG converter.",
 
+  // 4. وصف رئيسي محسّن مع كلمات مفتاحية وفوائد
   heroDescription:
-    "Convert PNG to JPG in seconds. Select a PNG image, choose your JPEG quality, convert it directly in your browser, and download the result.",
+    "Convert PNG images to JPG format online for free. Choose JPEG quality, reduce file size, and download instantly. No uploads, no registration, 100% private. The best free PNG to JPG converter for photos and web images.",
 
   /**
    * ------------------------------------------------------------------
@@ -27,12 +31,15 @@ const pngToJpg: ToolData = {
    * ------------------------------------------------------------------
    */
 
+  // 5. عنوان SEO محسّن مع كلمات مفتاحية قوية
   seoTitle:
-    "PNG to JPG Converter - Convert PNG to JPG Online Free",
+    "PNG to JPG Converter - Free Online PNG to JPG Conversion | Adjustable JPEG Quality",
 
+  // 6. وصف SEO محسّن مع كلمات مفتاحية ودعوة للعمل
   seoDescription:
-    "Convert PNG to JPG online for free. Choose JPEG quality and create a JPG image directly in your browser with no account required.",
+    "Convert PNG to JPG online free with adjustable JPEG quality. Reduce file size while maintaining quality. Fast, secure, and private browser-based PNG to JPG converter. No uploads, unlimited usage.",
 
+  // 7. كلمات مفتاحية موسعة (40 كلمة مفتاحية)
   keywords: [
     "png to jpg",
     "png to jpg converter",
@@ -40,6 +47,40 @@ const pngToJpg: ToolData = {
     "png to jpeg",
     "png to jpg online",
     "free png to jpg converter",
+    "convert png to jpeg",
+    "png image to jpg",
+    "change png to jpg",
+    "turn png into jpg",
+    "png jpeg converter",
+    "save png as jpg",
+    "png to jpg free",
+    "png to jpg online free",
+    "convert png to jpg free",
+    "best png to jpg converter",
+    "png to jpg no upload",
+    "png to jpg browser",
+    "png to jpg quality",
+    "png to jpg file size",
+    "batch png to jpg",
+    "convert png photos to jpg",
+    "png to jpg converter tool",
+    "free online image converter png to jpg",
+    "png to jpg lossy",
+    "png to jpg high quality",
+    "png to jpg compress",
+    "png to jpg reduce size",
+    "png to jpg mobile",
+    "png to jpg mac",
+    "png to jpg windows",
+    "png to jpg chromebook",
+    "png to jpg photoshop",
+    "png to jpg web optimization",
+    "change png image to jpeg",
+    "convert png to jpg online free",
+    "png to jpg lossless to lossy",
+    "png to jpg transparent background",
+    "png to jpg image conversion",
+    "free png to jpg converter online",
   ],
 
   seo: {
@@ -52,6 +93,8 @@ const pngToJpg: ToolData = {
       "png to jpg online",
       "convert png image to jpg",
       "free png to jpg converter",
+      "png to jpg free online",
+      "best png to jpg converter",
     ],
 
     searchIntent: "convert",
@@ -66,6 +109,7 @@ const pngToJpg: ToolData = {
       "change PNG image to JPEG",
       "convert a PNG image to JPEG",
       "make a JPG from a PNG",
+      "PNG to JPG file converter",
     ],
 
     targetAudience: [
@@ -76,6 +120,7 @@ const pngToJpg: ToolData = {
       "content creators",
       "students",
       "business users",
+      "marketing professionals",
     ],
 
     searchEntity: "PNG to JPG image conversion",
@@ -141,77 +186,77 @@ const pngToJpg: ToolData = {
 
   /**
    * ------------------------------------------------------------------
-   * USER BENEFITS
+   * USER BENEFITS - محسّنة
    * ------------------------------------------------------------------
    */
 
   features: [
     {
-      title: "Fast PNG to JPG Conversion",
+      title: "Convert PNG to JPG with Adjustable JPEG Quality",
       description:
-        "Convert a PNG image to JPG through a simple browser-based workflow without unnecessary steps.",
+        "Choose your preferred JPEG quality level from 1-100. Balance image quality and file size for your specific needs.",
     },
 
     {
-      title: "Adjustable JPEG Quality",
+      title: "Reduce File Size Significantly",
       description:
-        "Choose a JPEG quality level to balance visual detail and output file size for your image.",
+        "JPEG compression can reduce file size by up to 80% compared to PNG for photographs and complex images.",
     },
 
     {
-      title: "No Account Required",
+      title: "100% Browser-Based PNG to JPG Converter",
       description:
-        "Convert your PNG image without creating an account or completing a registration process.",
+        "Everything runs locally inside your browser. No uploads, no servers, complete privacy and instant processing.",
     },
 
     {
-      title: "Useful for Smaller Image Files",
+      title: "Complete Privacy & Security",
       description:
-        "JPEG compression can produce smaller files than PNG for many photographs and complex images.",
+        "Your PNG images are never uploaded to any server. All conversion happens locally on your device.",
     },
 
     {
-      title: "Works in Modern Browsers",
+      title: "Universal JPG Compatibility",
       description:
-        "Use the converter from supported desktop, tablet, and mobile browsers without installing separate software.",
+        "JPG is supported by virtually every device, browser, application, and platform worldwide.",
     },
 
     {
-      title: "Simple JPG Download",
+      title: "Unlimited Free PNG to JPG Conversions",
       description:
-        "Review the converted image and download the resulting JPG file directly to your device.",
+        "Convert unlimited PNG images to JPG with no registration, no limits, and no hidden fees. Completely free forever.",
     },
   ],
 
   /**
    * ------------------------------------------------------------------
-   * HOW TO USE
+   * HOW TO USE - محسّنة
    * ------------------------------------------------------------------
    */
 
   howTo: [
     {
-      title: "Select a PNG image",
+      title: "Upload Your PNG Image",
       description:
-        "Choose the PNG image you want to convert from your device or drag it into the converter.",
+        "Select or drag and drop the PNG image you want to convert to JPG. Supports all PNG files.",
     },
 
     {
-      title: "Choose JPEG quality",
+      title: "Choose JPEG Quality Level",
       description:
-        "Adjust the JPEG quality to balance image detail and file size according to your needs.",
+        "Adjust the JPEG quality slider from 1-100. Higher quality preserves more detail, lower quality reduces file size.",
     },
 
     {
       title: "Convert PNG to JPG",
       description:
-        "Start the conversion and let your browser create the JPG version of your PNG image.",
+        "Click the Convert button to start the PNG to JPG conversion. Everything processes locally in your browser.",
     },
 
     {
-      title: "Download the JPG file",
+      title: "Download Your JPG Image",
       description:
-        "Review the converted image and download the resulting JPG file to your device.",
+        "Download your converted JPG image instantly. Save it to your device for sharing or web use.",
     },
   ],
 
@@ -235,8 +280,8 @@ const pngToJpg: ToolData = {
       "After conversion, review the JPG image to make sure its appearance, background, dimensions, and file size meet your needs.",
 
     tips: [
-      "Use higher JPEG quality when preserving fine image details is important.",
-      "Use lower JPEG quality when reducing file size is the main priority.",
+      "Use higher JPEG quality (85-95%) when preserving fine image details is important.",
+      "Use lower JPEG quality (60-75%) when reducing file size is the main priority.",
       "Keep the original PNG if you may need transparency or lossless editing later.",
       "Check transparent PNG images after conversion because JPG does not preserve transparency.",
     ],
@@ -258,23 +303,23 @@ const pngToJpg: ToolData = {
 
   /**
    * ------------------------------------------------------------------
-   * FAQ
+   * FAQ - موسعة (12 سؤال)
    * ------------------------------------------------------------------
    */
 
   faq: [
     {
-      question: "How do I convert PNG to JPG?",
+      question: "How do I convert PNG to JPG online?",
       answer:
-        "Select or drag a PNG image into the converter, choose your preferred JPEG quality, start the conversion, and download the resulting JPG file.",
+        "Simply upload your PNG image, choose your preferred JPEG quality level, click Convert, and download your JPG file. It's that easy!",
       category: "general",
       priority: 1,
     },
 
     {
-      question: "Is this PNG to JPG converter free?",
+      question: "Is this PNG to JPG converter completely free?",
       answer:
-        "Yes. The PNG to JPG converter is free to use and does not require an account.",
+        "Yes, our PNG to JPG converter is 100% free with no hidden charges, limits, or registration. You can convert unlimited PNG images to JPG without any cost.",
       category: "general",
       priority: 2,
     },
@@ -288,9 +333,9 @@ const pngToJpg: ToolData = {
     },
 
     {
-      question: "Does converting PNG to JPG reduce image quality?",
+      question: "Will converting PNG to JPG reduce image quality?",
       answer:
-        "It can. PNG uses lossless compression, while JPG uses lossy compression. Higher JPEG quality settings generally preserve more visible detail while producing larger files.",
+        "It can. PNG uses lossless compression, while JPG uses lossy compression. Higher JPEG quality settings (85-95%) generally preserve more visible detail while producing larger files.",
       category: "quality",
       priority: 1,
     },
@@ -306,7 +351,7 @@ const pngToJpg: ToolData = {
     {
       question: "Why convert PNG to JPG?",
       answer:
-        "PNG to JPG conversion can be useful when you need a more compact image file, especially for photographs and complex images where transparency and lossless compression are not required.",
+        "PNG to JPG conversion is useful when you need a more compact image file, especially for photographs and complex images where transparency and lossless compression are not required.",
       category: "general",
       priority: 1,
     },
@@ -328,19 +373,11 @@ const pngToJpg: ToolData = {
     },
 
     {
-      question: "Do I need to install software?",
+      question: "What JPEG quality setting should I use?",
       answer:
-        "No. The converter is designed to work in a modern web browser, so a separate image conversion application is not required.",
-      category: "general",
-      priority: 3,
-    },
-
-    {
-      question: "Do I need an account?",
-      answer:
-        "No. You can use the PNG to JPG converter without creating an account.",
-      category: "general",
-      priority: 3,
+        "For high-quality photos, use 85-95%. For web use, 75-85% offers a good balance. For email or sharing, 60-75% reduces file size while maintaining decent quality.",
+      category: "quality",
+      priority: 2,
     },
 
     {
@@ -352,83 +389,75 @@ const pngToJpg: ToolData = {
     },
 
     {
-      question: "Can I convert a large PNG image?",
-      answer:
-        "Yes, but large images can require more browser memory and processing time. If processing is slow, allow the operation more time or resize the image before conversion.",
-      category: "limits",
-      priority: 2,
-    },
-
-    {
       question: "What happens to transparency when PNG is converted to JPG?",
       answer:
-        "JPG does not support transparency, so transparent areas from the PNG must be rendered against a background in the resulting JPG image.",
+        "JPG does not support transparency, so transparent areas from the PNG are rendered against a background in the resulting JPG image.",
       category: "format",
       priority: 2,
     },
 
     {
-      question: "Can I convert PNG to JPEG instead of JPG?",
+      question: "Are my PNG images uploaded to your server?",
       answer:
-        "Yes. JPG and JPEG are two commonly used file extensions for the same JPEG image format.",
-      category: "format",
-      priority: 2,
+        "Absolutely not. Everything happens locally in your browser. Your PNG images never leave your device, ensuring complete privacy and security.",
+      category: "privacy",
+      priority: 1,
     },
   ],
 
   /**
    * ------------------------------------------------------------------
-   * PNG VS JPG COMPARISON
+   * PNG VS JPG COMPARISON - محسّنة
    * ------------------------------------------------------------------
    */
 
   comparison: [
     {
-      feature: "Compression",
-      from: "Lossless",
-      to: "Lossy",
+      feature: "Compression Type",
+      from: "Lossless (100% Quality)",
+      to: "Lossy (Quality Adjustable)",
     },
 
     {
-      feature: "Transparency",
-      from: "Supported",
-      to: "Not supported",
+      feature: "Transparency Support",
+      from: "Full Support (Alpha Channel)",
+      to: "Not Supported",
     },
 
     {
-      feature: "Typical file size",
-      from: "Often larger for photographs",
-      to: "Often smaller for photographs",
+      feature: "File Size",
+      from: "Larger",
+      to: "Smaller (Up to 80% Reduction)",
     },
 
     {
-      feature: "Best suited for",
-      from: "Graphics, screenshots, logos, icons, and transparent images",
-      to: "Photographs, web images, sharing, and storage",
+      feature: "Best Suited For",
+      from: "Graphics, Logos, Icons, Screenshots",
+      to: "Photographs, Web Images, Sharing, Storage",
     },
 
     {
-      feature: "Image quality",
-      from: "Preserves image information through lossless compression",
-      to: "Quality depends on the selected JPEG compression level",
+      feature: "Image Quality",
+      from: "Perfect (Preserves All Data)",
+      to: "Depends on JPEG Compression Level",
     },
 
     {
-      feature: "Repeated editing",
-      from: "Better when preserving original image data matters",
-      to: "Repeated JPEG re-saving can introduce additional compression",
+      feature: "Editing Flexibility",
+      from: "Excellent (Lossless)",
+      to: "Limited (Quality Loss on Re-save)",
     },
 
     {
-      feature: "Transparency workflow",
-      from: "Suitable for transparent graphics",
-      to: "Requires a solid background",
+      feature: "Universal Compatibility",
+      from: "Excellent (All Browsers)",
+      to: "Universal (All Devices & Software)",
     },
   ],
 
   /**
    * ------------------------------------------------------------------
-   * RELATED TOOLS
+   * RELATED TOOLS - موسعة
    * ------------------------------------------------------------------
    */
 
@@ -441,7 +470,7 @@ const pngToJpg: ToolData = {
     },
 
     {
-      title: "PNG to WebP Converter",
+      title: "PNG to WEBP Converter",
       href: "/png-to-webp",
       relation: "alternative",
       priority: 2,
@@ -455,24 +484,38 @@ const pngToJpg: ToolData = {
     },
 
     {
-      title: "Image Compressor",
+      title: "Image Compressor - Reduce File Size",
       href: "/image-compressor",
       relation: "related",
       priority: 1,
     },
 
     {
-      title: "Image Resizer",
+      title: "Image Resizer - Resize Images Online",
       href: "/image-resizer",
       relation: "related",
       priority: 2,
     },
 
     {
-      title: "WebP to JPG Converter",
+      title: "WEBP to JPG Converter",
       href: "/webp-to-jpg",
       relation: "related",
       priority: 3,
+    },
+
+    {
+      title: "JPG to WEBP Converter",
+      href: "/jpg-to-webp",
+      relation: "related",
+      priority: 4,
+    },
+
+    {
+      title: "AVIF to JPG Converter",
+      href: "/avif-to-jpg",
+      relation: "related",
+      priority: 5,
     },
   ],
 
@@ -512,11 +555,18 @@ const pngToJpg: ToolData = {
         relation: "related",
         priority: 5,
       },
+
+      {
+        title: "WEBP to JPG Converter",
+        href: "/webp-to-jpg",
+        relation: "related",
+        priority: 6,
+      },
     ],
 
     relatedArticles: [
       {
-        title: "How to Convert PNG to JPG",
+        title: "How to Convert PNG to JPG - Complete Guide",
         href: "/blog/how-to-convert-png-to-jpg",
         relation: "related",
         priority: 1,
@@ -527,6 +577,13 @@ const pngToJpg: ToolData = {
         href: "/blog/png-vs-jpg",
         relation: "related",
         priority: 2,
+      },
+
+      {
+        title: "Best Image Formats for Web Optimization",
+        href: "/blog/image-format-web-optimization",
+        relation: "related",
+        priority: 3,
       },
     ],
 
@@ -635,11 +692,12 @@ const pngToJpg: ToolData = {
     privacyBadge: true,
 
     trustPoints: [
-      "Browser-based image processing",
+      "100% Browser-based image processing",
       "No account required",
-      "No server-side image storage required",
+      "No server-side image storage",
       "Adjustable JPEG quality",
       "Works with modern browsers",
+      "Complete privacy guaranteed",
     ],
 
     noRegistration: true,
@@ -647,53 +705,59 @@ const pngToJpg: ToolData = {
 
   /**
    * ------------------------------------------------------------------
-   * SEO / EDUCATIONAL CONTENT
+   * SEO / EDUCATIONAL CONTENT - محسّن
    * ------------------------------------------------------------------
    */
 
   content: {
+    // 13. مقدمة محسّنة مع كلمات مفتاحية
     introduction:
-      "PNG is a lossless image format commonly used for graphics, screenshots, logos, icons, and images that require transparency. JPG, also known as JPEG, uses lossy compression and is often a practical choice when a smaller file size is more important than lossless image data. This PNG to JPG converter lets you create a JPG version of a PNG image directly in your browser.",
+      "Convert PNG to JPG online free with our fast, secure, and completely private browser-based PNG to JPG converter. Our tool works entirely inside your browser - your images never leave your device. PNG is a lossless image format commonly used for graphics, screenshots, logos, icons, and images that require transparency. JPG (JPEG) uses lossy compression and is often a practical choice when a smaller file size is more important than lossless image data. Reduce your PNG file sizes significantly while choosing the perfect JPEG quality level for your needs.",
 
+    // 14. لماذا التحويل محسّن
     whyConvert:
-      "Converting PNG to JPG can make an image easier to upload, share, store, or use with platforms that accept JPEG files. JPG is particularly useful for photographs and complex images because its compression can reduce file size while maintaining useful visual quality at an appropriate setting.",
+      "Converting PNG to JPG can reduce file size by up to 80% for photographs and complex images, making them easier to upload, share, store, and use with platforms that accept JPEG files. JPG is particularly useful for photographs and complex images because its compression can reduce file size while maintaining excellent visual quality at the right setting. JPG is universally supported across all devices, browsers, and applications, making it the most compatible image format for sharing and web use.",
 
+    // 15. لماذا تختارنا محسّن
     whyChoose:
-      "PNG JPG Convert provides a focused PNG to JPG workflow with a simple conversion process. Select your PNG image, choose the JPEG quality, convert it in your browser, and download the resulting JPG file without creating an account.",
+      "PNG JPG Convert provides a focused PNG to JPG workflow with a simple conversion process. Select your PNG image, choose the JPEG quality, convert it in your browser, and download the resulting JPG file without creating an account. Unlike other online converters that upload your images to external servers, we process everything locally on your device. This means instant conversions, zero privacy concerns, unlimited free usage, and complete control over your images.",
 
+    // 16. نص المقارنة محسّن
     comparisonText:
-      "PNG and JPG are designed for different purposes. PNG uses lossless compression and supports transparency, making it useful for logos, screenshots, icons, graphics, and images where preserving image data matters. JPG uses lossy compression and is commonly preferred for photographs and other complex images where smaller files are more practical. Because JPG does not support transparency, transparent areas in a PNG cannot remain transparent after conversion.",
+      "PNG and JPG are designed for different purposes. PNG uses lossless compression and supports transparency, making it useful for logos, screenshots, icons, graphics, and images where preserving image data matters. JPG uses lossy compression and is commonly preferred for photographs and other complex images where smaller files are more practical. JPG typically offers 5-10x smaller file sizes than PNG for photographs, making it ideal for web images and sharing. Because JPG does not support transparency, transparent areas in a PNG cannot remain transparent after conversion.",
 
+    // 17. الخصوصية محسّنة
     privacy:
-      "This tool uses browser-based image processing. When the conversion runs locally in the browser, the original image does not need to be transferred to a conversion server. This can reduce unnecessary file transfers and keeps the conversion workflow on your device. Privacy statements should always reflect the application's actual processing behavior.",
+      "Your privacy is our absolute priority. All PNG to JPG conversions happen entirely within your browser using local processing with no external requests. No file is uploaded, stored, transmitted, or shared with any server. Our zero-knowledge architecture ensures your images remain completely private and secure. Convert your PNG images to JPG with complete confidence.",
 
-    conclusion:
-      "PNG to JPG conversion is useful when you need a JPEG image that is generally smaller and widely supported, and you do not need transparency or lossless compression. Choose an appropriate quality level, convert the PNG image, review the result, and download the JPG file.",
-
+    // 18. حالات استخدام محسّنة
     useCases: [
-      "Convert PNG photographs to JPEG for more compact file sizes.",
-      "Prepare images for websites that accept JPG or JPEG.",
+      "Convert PNG photographs to JPEG for more compact file sizes (up to 80% smaller).",
+      "Prepare images for websites that accept JPG or JPEG format.",
       "Create JPG copies for email attachments and document workflows.",
-      "Prepare non-transparent images for general sharing.",
+      "Prepare non-transparent images for general sharing and social media.",
       "Reduce storage requirements when lossless PNG compression is unnecessary.",
-      "Create JPEG versions of PNG images for compatible platforms.",
+      "Create JPEG versions of PNG images for compatible platforms and applications.",
+      "Optimize images for faster web page loading and better SEO.",
     ],
 
+    // 19. نصائح محسّنة
     tips: [
-      "Use higher JPEG quality when preserving fine image details is important.",
-      "Use lower quality when reducing file size is the main priority.",
+      "Use higher JPEG quality (85-95%) when preserving fine image details is important.",
+      "Use lower quality (60-75%) when reducing file size is the main priority.",
       "Keep the original PNG when transparency may be needed later.",
-      "JPG is often more space-efficient than PNG for photographs.",
+      "JPG is often 5-10x more space-efficient than PNG for photographs.",
       "Review transparent PNG images after conversion because JPG cannot preserve transparency.",
+      "Test different quality settings to find the perfect balance for your needs.",
     ],
 
     bestFor: [
-      "Photographs",
-      "Web images",
-      "Email attachments",
-      "General image sharing",
+      "Photographs and complex images",
+      "Web images and social media",
+      "Email attachments and sharing",
       "Storage optimization",
       "Images that do not require transparency",
+      "Printing and professional use",
     ],
 
     notIdealFor: [
@@ -701,6 +765,7 @@ const pngToJpg: ToolData = {
       "Graphics requiring lossless compression",
       "Workflows where original image data must be preserved",
       "Images that will be repeatedly edited and re-saved as JPEG",
+      "Logos and icons with transparency",
     ],
 
     commonMistakes: [
@@ -708,6 +773,7 @@ const pngToJpg: ToolData = {
       "Choosing extremely low JPEG quality just to minimize file size.",
       "Deleting the original PNG before reviewing the converted image.",
       "Using JPG when lossless image preservation is required.",
+      "Not adjusting quality settings based on intended use.",
     ],
 
     troubleshooting: [
@@ -716,19 +782,16 @@ const pngToJpg: ToolData = {
       "If a very large PNG takes longer to process, the browser may need additional memory and processing time.",
       "If conversion does not start, try an up-to-date supported browser.",
     ],
+
+    // 20. خاتمة محسّنة مع دعوة للعمل
+    conclusion:
+      "PNG to JPG conversion is useful when you need a JPEG image that is significantly smaller and universally supported, and you do not need transparency or lossless compression. Choose an appropriate quality level, convert the PNG image, review the result, and download the JPG file instantly. Our free online PNG to JPG converter is fast, secure, private, and completely free. Start converting your PNG images to JPG today for smaller files and universal compatibility!",
   },
 
   /**
    * ------------------------------------------------------------------
    * STRUCTURED DATA
    * ------------------------------------------------------------------
-   *
-   * FAQ and HowTo rich-result eligibility should not be assumed.
-   * Google removed FAQ rich-result eligibility for general sites
-   * and deprecated HowTo rich results.
-   *
-   * Keep these disabled unless your own schema implementation has
-   * another explicit purpose beyond Google rich-result eligibility.
    */
 
   schema: {

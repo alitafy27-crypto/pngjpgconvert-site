@@ -975,19 +975,19 @@ export type ToolData = {
 
   icon: string;
 
-  /* -------------------------------------------------------------------
-   * Conversion
-   * ------------------------------------------------------------------- */
+/* -------------------------------------------------------------------
+ * Conversion
+ * ------------------------------------------------------------------- */
 
-  from: FileFormat;
+from: string;
 
-  to: FileFormat;
+to: string;
 
-  inputMime: FileMimeType;
+inputMime: string;
 
-  outputMime: FileMimeType;
+outputMime: FileMimeType;
 
-  outputExtension: string;
+outputExtension: string;
 
   /* -------------------------------------------------------------------
    * Capabilities
