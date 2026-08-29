@@ -1,20 +1,23 @@
-import { tools } from "@/data/tools";
+import { toolsList } from "@/data/tools";
 import type { ToolData } from "@/data/tool.types";
 
 export function getTool(
   slug: string
 ): ToolData | undefined {
-  return tools[slug];
+  // ✅ استخدم find للبحث في المصفوفة
+  return toolsList.find((tool) => tool.slug === slug);
 }
 
 export function getAllTools(): ToolData[] {
-  return Object.values(tools);
+  // ✅ toolsList هي مصفوفة بالفعل
+  return toolsList;
 }
 
 export function getRelatedTools(
   slug: string
 ): ToolData[] {
-  return Object.values(tools).filter(
+  // ✅ استخدم filter على المصفوفة
+  return toolsList.filter(
     (tool) => tool.slug !== slug
   );
 }
