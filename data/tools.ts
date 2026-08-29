@@ -1,4 +1,4 @@
-  import type { ToolData } from "@/data/tool.types";
+import type { ToolData } from "@/data/tool.types";
 
 /**
  * =====================================================================
@@ -15,6 +15,38 @@
  * =====================================================================
  */
 
+// ✅ استيراد الفئات
+import { categories } from "./categories";
+
+// ✅ استيراد جميع الأدوات من ملفاتها
+import avifToJpg from "./tools/avif-to-jpg";
+import avifToPng from "./tools/avif-to-png";
+import avifToWebp from "./tools/avif-to-webp";
+import cropImage from "./tools/crop-image";
+import flipImage from "./tools/flip-image";
+import imageCompressor from "./tools/image-compressor";
+import imageCrop from "./tools/image-crop";
+import imageFlip from "./tools/image-flip";
+import imageResizer from "./tools/image-resizer";
+import imageRotate from "./tools/image-rotate";
+import imageToPdf from "./tools/image-to-pdf";
+import imageWatermark from "./tools/image-watermark";
+import jpgToAvif from "./tools/jpg-to-avif";
+import jpgToPng from "./tools/jpg-to-png";
+import jpgToWebp from "./tools/jpg-to-webp";
+import mergeImagesTool from "./tools/MergeImagesTool"; // إذا كان موجود
+import pdfMerge from "./tools/pdf-merge";
+import pdfToImage from "./tools/pdf-to-image";
+import pngToAvif from "./tools/png-to-avif";
+import pngToJpg from "./tools/png-to-jpg";
+import pngToWebp from "./tools/png-to-webp";
+import resizeImage from "./tools/resize-image";
+import rotateImage from "./tools/rotate-image";
+import watermarkImage from "./tools/watermark-image";
+import webpToAvif from "./tools/webp-to-avif";
+import webpToJpg from "./tools/webp-to-jpg";
+import webpToPng from "./tools/webp-to-png";
+
 /**
  * =====================================================================
  * TOOL LIST
@@ -22,7 +54,37 @@
  *
  * Add complete ToolData objects here.
  */
-export const toolsList: ToolData[] = [];
+export const toolsList: ToolData[] = [
+  avifToJpg,
+  avifToPng,
+  avifToWebp,
+  cropImage,
+  flipImage,
+  imageCompressor,
+  imageCrop,
+  imageFlip,
+  imageResizer,
+  imageRotate,
+  imageToPdf,
+  imageWatermark,
+  jpgToAvif,
+  jpgToPng,
+  jpgToWebp,
+  pdfMerge,
+  pdfToImage,
+  pngToAvif,
+  pngToJpg,
+  pngToWebp,
+  resizeImage,
+  rotateImage,
+  watermarkImage,
+  webpToAvif,
+  webpToJpg,
+  webpToPng,
+];
+
+// إذا كان MergeImagesTool موجوداً، أضفه:
+// mergeImagesTool,
 
 /**
  * =====================================================================
@@ -153,6 +215,22 @@ export function getToolsByCategory(
       normalizeText(tool.category) ===
       normalizedCategory,
   );
+}
+
+/**
+ * =====================================================================
+ * GET CATEGORIES WITH TOOLS
+ * =====================================================================
+ *
+ * Returns categories with their associated tools.
+ */
+export function getCategoriesWithTools() {
+  return categories.map((category) => ({
+    ...category,
+    tools: category.items
+      .map((slug) => getTool(slug))
+      .filter(Boolean) as ToolData[],
+  }));
 }
 
 /**
