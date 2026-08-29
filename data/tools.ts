@@ -851,3 +851,4 @@ export function validateToolsRegistry(): {
     missingSlugs,
   };
 }
+export { toolsList as tools };
